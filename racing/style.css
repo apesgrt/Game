@@ -1,0 +1,187 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  width: 100%; height: 100%;
+  overflow: hidden;
+  background: #111;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  user-select: none;
+  touch-action: none;
+}
+
+#game {
+  display: block;
+  position: fixed;
+  top: 0; left: 0;
+}
+
+/* ── HUD ── */
+#hud {
+  position: fixed;
+  top: 16px; left: 0; right: 0;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0 20px;
+  pointer-events: none;
+  z-index: 10;
+}
+
+#hud-score {
+  font-size: clamp(22px, 6vw, 36px);
+  font-weight: 900;
+  color: #fff;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+  letter-spacing: 0.05em;
+}
+
+#hud-speed {
+  position: fixed;
+  top: 68px;   /* tepat di bawah pause button */
+  right: 16px;
+  font-size: clamp(11px, 3vw, 13px);
+  color: rgba(255,255,255,0.6);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* ── JOYSTICK ── */
+#joystick-zone {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#joystick-base {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.06);
+  border: 2px solid rgba(255,255,255,0.15);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 30px rgba(0,0,0,0.5);
+}
+
+#joystick-knob {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #fff, #aaa);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  transition: box-shadow 0.1s;
+}
+
+#joystick-knob.active {
+  box-shadow: 0 4px 24px rgba(255,200,0,0.5);
+  background: radial-gradient(circle at 35% 35%, #ffe066, #e8a000);
+}
+
+/* ── OVERLAYS ── */
+.overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  backdrop-filter: blur(4px);
+}
+.overlay.hidden { display: none; }
+
+.overlay-box {
+  background: #1a1a22;
+  border: 1px solid #2a2a38;
+  border-radius: 20px;
+  padding: 36px 32px;
+  text-align: center;
+  max-width: 320px;
+  width: 90%;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+}
+
+.overlay-title {
+  font-size: clamp(26px, 7vw, 38px);
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: 0.08em;
+  margin-bottom: 10px;
+}
+
+.overlay-sub {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.8;
+  margin-bottom: 28px;
+  letter-spacing: 0.05em;
+}
+
+.overlay-btn {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #e84545, #c42020);
+  border: none;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  cursor: pointer;
+  font-family: inherit;
+  box-shadow: 0 6px 24px rgba(232,69,69,0.4);
+  transition: all 0.2s;
+}
+.overlay-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(232,69,69,0.5); }
+.overlay-btn:active { transform: translateY(0); }
+
+.go-score {
+  font-size: clamp(36px, 10vw, 56px);
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+
+.go-best {
+  font-size: 12px;
+  color: #e8c84a;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+
+.overlay-back {
+  display: block;
+  margin-top: 14px;
+  font-size: 11px;
+  color: #444;
+  text-decoration: none;
+  letter-spacing: 0.15em;
+  transition: color 0.2s;
+}
+.overlay-back:hover { color: #aaa; }
+
+
+#pause-btn {
+  position: fixed;
+  top: 16px; right: 16px;
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; cursor: pointer; z-index: 20;
+}
