@@ -231,6 +231,7 @@ function renderCaptured() {
       const span=document.createElement('span');
       span.className=color==='w'?'white-piece':'black-piece';
       span.style.fontSize='16px';
+      const enemyColor = color === 'w' ? 'b' : 'w';
       span.textContent=UNICODE[color+t];
       el.appendChild(span);
     });
