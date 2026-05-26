@@ -232,7 +232,7 @@ function renderCaptured() {
       span.className=color==='w'?'white-piece':'black-piece';
       span.style.fontSize='16px';
       const enemyColor = color === 'w' ? 'b' : 'w';
-      span.textContent=UNICODE[color+t];
+      span.textContent=UNICODE[enemyColor+t];
       el.appendChild(span);
     });
   });
