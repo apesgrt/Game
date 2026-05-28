@@ -10,7 +10,8 @@
 
 <div class="bg1"></div>
 <div class="bg2"></div>
-
+<iframe id="gameFrame"></iframe>
+  
 <main class="container">
 
 <div class="logo-box">
@@ -90,6 +91,20 @@
 </footer>
 
 </main>
+
+<script>
+function openGame(path){
+  const frame = document.getElementById("gameFrame");
+  frame.style.display = "block";
+  frame.src = path;
+}
+
+function closeGame(){
+  const frame = document.getElementById("gameFrame");
+  frame.style.display = "none";
+  frame.src = "";
+}
+</script>
 
 </body>
 </html>
