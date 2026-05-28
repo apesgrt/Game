@@ -464,7 +464,15 @@ async function extractArt(file) {
           while (j < end && bytes[j] !== 0) j++; j++;
           const img  = bytes.slice(j, i + 10 + fsz);
           const mime = bytes[i+11] === 0x89 ? 'image/png' : 'image/jpeg';
-          return URL.createObjectURL(new Blob([img], { type: mime }));
+
+          // ← Ganti blob URL jadi base64
+          return await new Promise(res => {
+            const blob = new Blob([img], { type: mime });
+            const reader = new FileReader();
+            reader.onload = e => res(e.target.result); // data:image/jpeg;base64,...
+            reader.onerror = () => res(null);
+            reader.readAsDataURL(blob);
+          });
         }
         i += 10 + Math.max(1, fsz);
       }
