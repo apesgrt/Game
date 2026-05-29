@@ -162,7 +162,7 @@ function update() {
   dayTick = (dayTick + 1) % DAY_CYCLE;
 
   speed = baseSpeed + distance / 2000;
-  speed = Math.min(speed, 9.44); // 250 km/h max
+  speed = Math.min(speed, 4.11); // 250 km/h max
 
   const accel = 1.7, friction = 0.77, maxV = 7;
   player.vx += joystick.x * accel;
