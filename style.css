@@ -367,7 +367,7 @@ body.home-page #hub::-webkit-scrollbar-thumb { background: #2a2a3a; border-radiu
   height: 0; overflow: hidden; transition: height .3s ease;
   border-top: 1px solid rgba(255,255,255,.07);
 }
-#music-bar.visible { height: 1200px; }
+#music-bar.visible { height: 900px; }
 #music-iframe { width: 100%; height: 100%; border: none; background: rgba(13,13,26,.97); }
 
 /* Popup */
