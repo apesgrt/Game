@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>Game Archive</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
+html,body{width:100%;height:100%;overflow:hidden;background:#07070d;color:#fff}
+
+/* ── GAME IFRAME LAYER ── */
+#game-layer{position:fixed;inset:0;z-index:200;display:none;background:#000}
+#game-layer.active{display:block}
+#game-iframe{width:100%;height:100%;border:none;display:block}
+
+/* ── MUSIC BAR ── */
+#music-bar{position:fixed;bottom:0;left:0;right:0;z-index:100;height:0;overflow:hidden;transition:height .35s cubic-bezier(.4,0,.2,1);border-top:1px solid rgba(255,255,255,.07);backdrop-filter:blur(20px)}
+#music-bar.open{height:725px}
+#music-iframe{width:100%;height:100%;border:none}
+
+/* ── BACKGROUND ── */
+.blob{position:fixed;border-radius:50%;filter:blur(100px);pointer-events:none;z-index:0}
+.b1{width:500px;height:500px;background:radial-gradient(circle,rgba(88,101,242,.2),transparent 70%);top:-150px;left:-150px;animation:blobMove 12s ease-in-out infinite}
+.b2{width:400px;height:400px;background:radial-gradient(circle,rgba(168,85,247,.15),transparent 70%);bottom:-100px;right:-100px;animation:blobMove 10s ease-in-out infinite reverse}
+.b3{width:300px;height:300px;background:radial-gradient(circle,rgba(236,72,153,.1),transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);animation:blobMove 15s ease-in-out infinite}
+@keyframes blobMove{0%,100%{transform:translate(0,0)}33%{transform:translate(30px,-20px)}66%{transform:translate(-20px,25px)}}
+
+/* Particles */
+#pts{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden}
+.pt{position:absolute;border-radius:50%;animation:ptUp linear infinite}
+@keyframes ptUp{0%{transform:translateY(100vh);opacity:0}10%{opacity:.8}85%{opacity:.3}100%{transform:translateY(-50px);opacity:0}}
+
+/* ── HUB ── */
+#hub{position:relative;z-index:10;height:100%;overflow-y:auto;padding-bottom:0;transition:padding-bottom .35s cubic-bezier(.4,0,.2,1)}
+#hub::-webkit-scrollbar{width:3px}
+#hub::-webkit-scrollbar-thumb{background:rgba(88,101,242,.4);border-radius:2px}
+.container{max-width:460px;margin:0 auto;padding:24px 16px 32px}
+
+/* ── HEADER ── */
+.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
+.brand{display:flex;align-items:center;gap:10px}
+.brand-icon{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#5865f2,#a855f7);display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 0 20px rgba(88,101,242,.4)}
+.brand-name{font-size:15px;font-weight:800;background:linear-gradient(135deg,#a5b4fc,#e879f9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:.05em}
+.brand-sub{font-size:10px;color:#334;letter-spacing:.2em;margin-top:1px}
+.header-badge{padding:5px 12px;border-radius:20px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);font-size:10px;color:#556;letter-spacing:.15em}
+
+/* ── HERO ── */
+.hero{margin-bottom:28px;animation:slideUp .6s ease}
+@keyframes slideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.hero h1{font-size:clamp(24px,6vw,34px);font-weight:900;line-height:1.2;margin-bottom:8px;background:linear-gradient(135deg,#fff 0%,rgba(165,180,252,.8) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{font-size:13px;color:rgba(255,255,255,.35);line-height:1.6}
+
+/* ── SECTION LABEL ── */
+.sec-label{font-size:10px;color:rgba(255,255,255,.25);letter-spacing:.25em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.sec-label::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.06)}
+
+/* ── GAME CARDS ── */
+.games-grid{display:flex;flex-direction:column;gap:10px;margin-bottom:28px}
+
+.game-card{
+  display:flex;align-items:center;gap:14px;
+  padding:14px 16px;border-radius:20px;
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.07);
+  cursor:pointer;transition:all .25s cubic-bezier(.4,0,.2,1);
+  position:relative;overflow:hidden;
+  animation:cardIn .5s ease both;
+}
+.game-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.04),transparent 60%);opacity:0;transition:.25s}
+.game-card:active{transform:scale(.97)}
+.game-card:hover{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.14);transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,0,0,.4)}
+.game-card:hover::before{opacity:1}
+@keyframes cardIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* Stagger */
+.game-card:nth-child(1){animation-delay:.05s}
+.game-card:nth-child(2){animation-delay:.1s}
+.game-card:nth-child(3){animation-delay:.15s}
+.game-card:nth-child(4){animation-delay:.2s}
+.game-card:nth-child(5){animation-delay:.25s}
+.game-card:nth-child(6){animation-delay:.3s}
+
+.card-icon{
+  width:50px;height:50px;border-radius:14px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:24px;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);
+  transition:.25s;
+}
+.game-card:hover .card-icon{transform:scale(1.08) rotate(-3deg)}
+
+.card-body{flex:1;min-width:0}
+.card-body h2{font-size:14px;font-weight:700;color:#f0f0f0;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card-body p{font-size:11px;color:rgba(255,255,255,.3);line-height:1.4;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+
+.card-btn{
+  padding:8px 14px;border-radius:10px;border:none;
+  background:rgba(255,255,255,.08);color:rgba(255,255,255,.6);
+  font-size:11px;font-weight:700;letter-spacing:.08em;
+  cursor:pointer;flex-shrink:0;font-family:inherit;
+  transition:.2s;pointer-events:none;
+}
+.game-card:hover .card-btn{background:rgba(88,101,242,.3);color:#a5b4fc}
+
+/* Music card */
+.music-card{border-color:rgba(88,101,242,.2);background:rgba(88,101,242,.04)}
+.music-card .card-icon{background:rgba(88,101,242,.15);border-color:rgba(88,101,242,.2)}
+.music-card .card-btn{background:rgba(88,101,242,.15);color:#818cf8;pointer-events:all}
+.music-card:hover{border-color:rgba(88,101,242,.4);background:rgba(88,101,242,.08)}
+
+/* Accent colors per game */
+.game-card[data-color="ttt"]  .card-icon{background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.2)}
+.game-card[data-color="chess"].card-icon{background:rgba(245,158,11,.12);border-color:rgba(245,158,11,.2)}
+.game-card[data-color="race"] .card-icon{background:rgba(236,72,153,.12);border-color:rgba(236,72,153,.2)}
+.game-card[data-color="ludo"] .card-icon{background:rgba(16,185,129,.12);border-color:rgba(16,185,129,.2)}
+.game-card[data-color="snake"].card-icon{background:rgba(6,182,212,.12);border-color:rgba(6,182,212,.2)}
+.game-card[data-color="pop"]   .card-icon{background:rgba(251,146,60,.12);border-color:rgba(251,146,60,.2)}
+.game-card[data-color="blast"] .card-icon{background:rgba(77,150,255,.12);border-color:rgba(77,150,255,.2)}
+
+/* ── FOOTER ── */
+footer{text-align:center;font-size:11px;color:rgba(255,255,255,.1);letter-spacing:.2em;padding:8px 0}
+
+/* ── RIPPLE ── */
+.ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,.12);transform:scale(0);animation:rippleAnim .6s ease;pointer-events:none}
+@keyframes rippleAnim{to{transform:scale(4);opacity:0}}
+</style>
+</head>
+<body>
+
+<!-- Blobs -->
+<div class="blob b1"></div>
+<div class="blob b2"></div>
+<div class="blob b3"></div>
+<div id="pts"></div>
+
+<!-- Game fullscreen iframe -->
+<div id="game-layer">
+  <iframe id="game-iframe" src="" allow="autoplay *"></iframe>
+</div>
+
+<!-- Hub -->
+<div id="hub">
+  <div class="container">
+
+    <div class="header">
+      <div class="brand">
+        <div class="brand-icon">🎮</div>
+        <div>
+          <div class="brand-name">Game Bedeghonk</div>
+          <div class="brand-sub">NGAWUR Cik</div>
+        </div>
+      </div>
+      <div class="header-badge">v2.0</div>
+    </div>
+
+    <div class="hero">
+      <h1>Pilih Game<br>Kesukaan mu</h1>
+      <p>Kumpulan mini game seru dengan desain modern dan simple yang ajib!</p>
+    </div>
+
+    <div class="sec-label">GAMES</div>
+    <div class="games-grid">
+
+      <div class="game-card" data-color="ttt" onclick="openGame('tictactoe/index.html')">
+        <div class="card-icon">❌</div>
+        <div class="card-body"><h2>Tic Tac Toe</h2><p>Strategi klasik 3×3, siapa yang duluan sejajarkan 3?</p></div>
+        <button class="card-btn">MAIN</button>
+      </div>
+
+      <div class="game-card" onclick="openGame('luncur/index.html')">
+        <div class="card-icon">🔵</div>
+        <div class="card-body"><h2>Luncur</h2><p>Geser bidak, susun warna, raih kemenangan.</p></div>
+        <button class="card-btn">MAIN</button>
+      </div>
+
+      <div class="game-card" data-color="chess" onclick="openGame('chess/index.html')">
+        <div class="card-icon">♟️</div>
+        <div class="card-body"><h2>Chess</h2><p>Catur modern lengkap dengan bot AI 3 level.</p></div>
+        <button class="card-btn">MAIN</button>
+      </div>
+
+      <div class="game-card" data-color="race" onclick="openGame('racing/index.html')">
+        <div class="card-icon">🏎️</div>
+        <div class="card-body"><h2>Road Rush</h2><p>Balap mobil, hindari rintangan, raih skor tertinggi.</p></div>
+        <button class="card-btn">MAIN</button>
+      </div>
+      
+      <div class="game-card" data-color="blast" onclick="openGame('BlockBlast/block-blast.html')">
+        <div class="card-icon">🟦</div>
+        <div class="card-body"><h2>Block Blast</h2><p>Drag &amp; drop blok ke grid, isi baris &amp; kolom untuk blast!</p></div>
+        <button class="card-btn">MAIN</button>
+      </div>
+      
+          <div class="sec-label">Tools</div>
+          <div class="games-grid">
+
+      <div class="game-card music-card" onclick="toggleMusic()">
+        <div class="card-icon">🎧</div>
+        <div class="card-body"><h2>Whoop Music</h2><p>Music player offline. Shuffle, playlist, album art.</p></div>
+        <button class="card-btn" id="musicBtn">BUKA</button>
+      </div>
+
+    </div>
+
+    <footer>⚡ EDAN Bangeft</footer>
+  </div>
+</div>
+
+<!-- Music bar iframe (tetap hidup) -->
+<div id="music-bar">
+  <iframe id="music-iframe"
+    src="music/index.html"
+    allow="autoplay *; clipboard-write"
+    sandbox="allow-scripts allow-same-origin allow-forms allow-popups">
+  </iframe>
+</div>
+
+<script>
+'use strict';
+
+// ── Particles ──────────────────────────────────────────────────────────────
+const ptWrap = document.getElementById('pts');
+const ptColors = ['#5865f2','#a855f7','#ec4899','#06b6d4','#10b981','#f59e0b'];
+for(let i=0;i<20;i++){
+  const pt=document.createElement('div');pt.className='pt';
+  const s=2+Math.random()*3;
+  pt.style.cssText=`width:${s}px;height:${s}px;left:${Math.random()*100}%;background:${ptColors[i%ptColors.length]};animation-duration:${6+Math.random()*8}s;animation-delay:${Math.random()*6}s;opacity:.5`;
+  ptWrap.appendChild(pt);
+}
+
+// ── Ripple effect ──────────────────────────────────────────────────────────
+document.querySelectorAll('.game-card').forEach(card=>{
+  card.addEventListener('click',function(e){
+    const r=document.createElement('span');r.className='ripple';
+    const rect=this.getBoundingClientRect();
+    const size=Math.max(rect.width,rect.height);
+    r.style.cssText=`width:${size}px;height:${size}px;left:${e.clientX-rect.left-size/2}px;top:${e.clientY-rect.top-size/2}px`;
+    this.appendChild(r);
+    setTimeout(()=>r.remove(),600);
+  });
+});
+
+// ── Game iframe ────────────────────────────────────────────────────────────
+let gameOpen=false;
+
+function openGame(src){
+  const layer=document.getElementById('game-layer');
+  const iframe=document.getElementById('game-iframe');
+  iframe.src=src;
+  layer.classList.add('active');
+  gameOpen=true;
+  history.pushState({game:true},'','');
+}
+
+function closeGame(){
+  const layer=document.getElementById('game-layer');
+  const iframe=document.getElementById('game-iframe');
+  layer.classList.remove('active');
+  // Small delay then clear src to save memory
+  setTimeout(()=>{ if(!gameOpen) iframe.src=''; },300);
+  gameOpen=false;
+}
+
+// ── Music bar ──────────────────────────────────────────────────────────────
+let musicOpen=false;
+
+function toggleMusic(){
+  musicOpen=!musicOpen;
+  const bar=document.getElementById('music-bar');
+  const hub=document.getElementById('hub');
+  const btn=document.getElementById('musicBtn');
+  if(musicOpen){
+    bar.classList.add('open');
+    hub.style.paddingBottom='725px';
+    btn.textContent='TUTUP';
+    history.pushState({music:true},'','');
+  } else {
+    closeMusic();
+  }
+}
+
+function closeMusic(){
+  musicOpen=false;
+  document.getElementById('music-bar').classList.remove('open');
+  document.getElementById('hub').style.paddingBottom='0';
+  document.getElementById('musicBtn').textContent='BUKA';
+}
+
+// ── Back button / popstate ─────────────────────────────────────────────────
+window.addEventListener('popstate',()=>{
+  if(gameOpen){closeGame();return;}
+  if(musicOpen){closeMusic();}
+});
+
+// ── Messages from iframes ──────────────────────────────────────────────────
+window.addEventListener('message',e=>{
+  if(e.data==='game:close') closeGame();
+  if(e.data==='music:close') closeMusic();
+});
+</script>
+</body>
+</html>
