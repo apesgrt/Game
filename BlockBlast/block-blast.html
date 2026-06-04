@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Block Blast</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Bebas+Neue&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="block-blast.css">
+</head>
+<body>
+
+  <div id="bb-wrap">
+
+    <!-- Animated ambient background -->
+    <div id="bb-bg">
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="orb orb-3"></div>
+    </div>
+
+    <!-- Game canvas -->
+    <canvas id="bb-canvas"></canvas>
+
+    <!-- HUD header: tombol kembali + skor + best -->
+    <header id="bb-hud" aria-label="Statistik">
+      <button id="btn-back" class="btn-back" aria-label="Kembali ke menu">&#8592;</button>
+      <div class="stat-card stat-grow">
+        <span class="stat-label">SKOR</span>
+        <span class="stat-value" id="hud-score">0</span>
+      </div>
+      <div class="stat-card stat-grow stat-right">
+        <span class="stat-label">TERBAIK</span>
+        <span class="stat-value gold" id="hud-best">0</span>
+      </div>
+    </header>
+
+    <!-- Combo toast -->
+    <div id="bb-combo" role="status" aria-live="polite"></div>
+
+    <!-- Overlays -->
+    <div id="bb-overlay">
+
+      <!-- Start -->
+      <div id="screen-start" class="screen">
+        <div class="logo-wrap">
+          <div class="logo-row">
+            <span class="logo-gem" style="--gc:#FF6B6B;--gd:0s">B</span>
+            <span class="logo-gem" style="--gc:#FF9A3C;--gd:.06s">L</span>
+            <span class="logo-gem" style="--gc:#FFD93D;--gd:.12s">O</span>
+            <span class="logo-gem" style="--gc:#6BCB77;--gd:.18s">C</span>
+            <span class="logo-gem" style="--gc:#4ECDC4;--gd:.24s">K</span>
+          </div>
+          <div class="logo-row">
+            <span class="logo-gem" style="--gc:#4D96FF;--gd:.30s">B</span>
+            <span class="logo-gem" style="--gc:#C77DFF;--gd:.36s">L</span>
+            <span class="logo-gem" style="--gc:#FF79C6;--gd:.42s">A</span>
+            <span class="logo-gem" style="--gc:#FF6B6B;--gd:.48s">S</span>
+            <span class="logo-gem" style="--gc:#FFD93D;--gd:.54s">T</span>
+          </div>
+        </div>
+        <p class="screen-hint">Drag blok ke grid &bull; Isi baris &amp; kolom untuk blast</p>
+        <button id="btn-start" class="btn btn-primary">&#9654; MAIN SEKARANG</button>
+        <button id="btn-back-menu" class="btn btn-ghost">&#8592; MENU</button>
+      </div>
+
+      <!-- Game Over -->
+      <div id="screen-over" class="screen hidden">
+        <div class="over-emoji">&#128165;</div>
+        <h2 class="over-title">GAME OVER</h2>
+        <div class="final-score" id="final-score">0</div>
+        <div class="final-label">SKOR AKHIR</div>
+        <div class="record-badge hidden" id="new-record">&#127942; REKOR BARU!</div>
+        <div class="prev-best" id="prev-best"></div>
+        <button id="btn-restart" class="btn btn-danger">&#8635; MAIN LAGI</button>
+        <button id="btn-back-over" class="btn btn-ghost">&#8592; MENU</button>
+      </div>
+
+    </div>
+
+    <div id="bb-levelflash" aria-hidden="true"></div>
+  </div>
+
+  <script src="block-blast.js"></script>
+</body>
+</html>
