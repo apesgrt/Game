@@ -1,0 +1,35 @@
+/* ============================================
+   GLOBAL BASE — dipakai semua halaman
+   ============================================ */
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Tahoma,sans-serif}
+html,body{width:100%;height:100%}
+
+/* ============================================
+   LOADING PAGE (index.html)
+   ============================================ */
+body.loading-page{background:#07070d;display:flex;align-items:center;justify-content:center;overflow:hidden}
+
+/* ============================================
+   GAME PAGES — shared back button style
+   ============================================ */
+.back,.back-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  color:#aaa;text-decoration:none;cursor:pointer;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:12px;padding:9px 16px;
+  font-size:12px;letter-spacing:.1em;
+  transition:.2s;font-family:inherit;
+}
+.back:hover,.back-btn:hover{background:rgba(255,255,255,.12);color:#fff}
+
+/* overlay-back (racing, dll) */
+.overlay-back{
+  display:block;margin-top:12px;
+  font-size:11px;color:rgba(255,255,255,.35);
+  text-decoration:none;letter-spacing:.12em;
+  cursor:pointer;background:none;border:none;
+  font-family:inherit;text-align:center;
+  transition:.2s;
+}
+.overlay-back:hover{color:rgba(255,255,255,.7)}
