@@ -17,6 +17,15 @@
   document.addEventListener('touchend',function(e){const now=Date.now();if(now-lastTouchEnd<=330)e.preventDefault();lastTouchEnd=now},{passive:false});
 })();
 </script>
+
+<script id="NO_ZOOM_GLOBAL">
+(function(){
+  document.addEventListener('gesturestart',function(e){e.preventDefault()},{passive:false});
+  document.addEventListener('gesturechange',function(e){e.preventDefault()},{passive:false});
+  document.addEventListener('wheel',function(e){if(e.ctrlKey)e.preventDefault()},{passive:false});
+  let t=0;document.addEventListener('touchend',function(e){const n=Date.now();if(n-t<=330)e.preventDefault();t=n},{passive:false});
+})();
+</script>
 </head>
 <body>
 
