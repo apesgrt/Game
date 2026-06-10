@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Road Rush</title>
+  <link rel="stylesheet" href="style.css">
+<script>
+(function(){
+  document.addEventListener('gesturestart',function(e){e.preventDefault()},{passive:false});
+  document.addEventListener('gesturechange',function(e){e.preventDefault()},{passive:false});
+  document.addEventListener('wheel',function(e){if(e.ctrlKey)e.preventDefault()},{passive:false});
+  let lastTouchEnd=0;
+  document.addEventListener('touchend',function(e){const now=Date.now();if(now-lastTouchEnd<=330)e.preventDefault();lastTouchEnd=now},{passive:false});
+})();
+</script>
+</head>
+<body>
+  <canvas id="game"></canvas>
+
+  <!-- HUD -->
+  <div id="hud">
+    <div id="hud-score">0</div>
+    <div id="hud-speed"></div>
+  </div>
+  
+  <div id="pause-btn" onclick="togglePause()">⏸</div>
+
+<div class="overlay hidden" id="overlay-pause">
+  <div class="overlay-box">
+    <div class="overlay-title">⏸ PAUSE</div>
+    <button class="overlay-btn" onclick="togglePause()">LANJUT</button>
+    <button class="overlay-back" onclick="window.parent.postMessage('game:close','*')">← Kembali ke Menu</button>
+  </div>
+</div>
+
+  <!-- Analog Joystick -->
+  <div id="joystick-zone">
+    <div id="joystick-base">
+      <div id="joystick-knob"></div>
+    </div>
+  </div>
+
+  <!-- Overlay: Start -->
+  <div class="overlay" id="overlay-start">
+    <div class="overlay-box">
+      <div class="overlay-title">🏎 ROAD RUSH</div>
+      <div class="overlay-sub">Hindari kendaraan lain<br>Makin jauh makin tinggi skor</div>
+      <button class="overlay-btn" id="btn-start">MULAI</button>
+    </div>
+  </div>
+
+  <!-- Overlay: Game Over -->
+  <div class="overlay hidden" id="overlay-gameover">
+    <div class="overlay-box">
+      <div class="overlay-title">💥 GAME OVER</div>
+      <div id="go-score" class="go-score"></div>
+      <div id="go-best" class="go-best"></div>
+      <button class="overlay-btn" id="btn-restart">MAIN LAGI</button>
+      <button class="overlay-back" onclick="window.parent.postMessage('game:close','*')">← Kembali ke Menu</button>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
