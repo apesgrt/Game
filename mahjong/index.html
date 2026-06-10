@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Mahjong Solitaire</title>
+<script>
+(function(){
+  document.addEventListener('gesturestart', function(e){ e.preventDefault(); }, {passive:false});
+  document.addEventListener('gesturechange', function(e){ e.preventDefault(); }, {passive:false});
+  document.addEventListener('wheel', function(e){ if(e.ctrlKey) e.preventDefault(); }, {passive:false});
+  let lastTouchEnd = 0;
+  document.addEventListener('touchend', function(e){
+    const now = Date.now();
+    if(now - lastTouchEnd <= 330) e.preventDefault();
+    lastTouchEnd = now;
+  }, {passive:false});
+})();
+</script>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none}
+:root{
+  --tw:clamp(38px,10.3vw,57px);
+  --th:calc(var(--tw)*1.26);
+  --sx:calc(var(--tw)*.82);
+  --sy:calc(var(--th)*.74);
+  --lx:calc(var(--tw)*.11);
+  --ly:calc(var(--th)*-.13);
+  --bg:#061711;--green:#0c6c43;--green2:#18b56d;--gold:#ffe58d;--gold2:#c99a36;
+  --panel:rgba(2,19,15,.76);--line:rgba(255,232,150,.20);--txt:#fff8dc;--dim:rgba(255,248,220,.68);
+}
+html,body{margin:0;width:100%;min-height:100%;overflow:hidden;touch-action:manipulation;background:#000;color:var(--txt);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+body{
+  background:
+    radial-gradient(circle at 50% 12%,rgba(255,229,141,.18),transparent 17%),
+    radial-gradient(circle at 20% 42%,rgba(70,255,172,.20),transparent 24%),
+    radial-gradient(circle at 90% 58%,rgba(33,205,126,.20),transparent 22%),
+    linear-gradient(180deg,#031812 0%,#075b39 45%,#16bf72 100%);
+}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background:
+  radial-gradient(circle at 8% 18%,rgba(255,233,118,.9) 0 2px,transparent 3px),
+  radial-gradient(circle at 86% 13%,rgba(255,233,118,.75) 0 2px,transparent 3px),
+  radial-gradient(circle at 78% 67%,rgba(255,233,118,.75) 0 2px,transparent 3px),
+  radial-gradient(circle at 18% 76%,rgba(255,233,118,.75) 0 2px,transparent 3px);
+  opacity:.72}
+.app{height:100dvh;max-width:560px;margin:0 auto;padding:10px 10px 12px;display:flex;flex-direction:column;gap:8px;position:relative;z-index:1;overflow:hidden}
+.topbar{height:50px;display:flex;align-items:center;gap:8px;flex:0 0 auto}
+.back{width:44px;height:44px;border:1px solid rgba(255,255,255,.10);background:rgba(0,0,0,.35);color:white;border-radius:15px;font-size:23px;font-weight:900;display:grid;place-items:center;box-shadow:0 12px 30px rgba(0,0,0,.25)}
+.title{flex:1;min-width:0;background:rgba(0,25,18,.58);border:1px solid var(--line);border-radius:18px;padding:9px 12px;box-shadow:0 12px 35px rgba(0,0,0,.22)}
+.title h1{margin:0;color:var(--gold);font-size:17px;line-height:1}.title p{margin:4px 0 0;font-size:11px;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;flex:0 0 auto}.stat{background:rgba(0,25,18,.56);border:1px solid var(--line);border-radius:14px;padding:7px 5px;text-align:center}.stat span{display:block;font-size:9px;color:var(--dim);margin-bottom:2px}.stat strong{font-size:14px;color:#fff}
+.controls{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;flex:0 0 auto}button{border:0;border-radius:13px;padding:10px 8px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#201402;font-weight:950;box-shadow:0 8px 18px rgba(0,0,0,.18)}button:active{transform:scale(.97)}button.ghost{background:rgba(0,25,18,.64);border:1px solid var(--line);color:var(--txt)}
+.levels{display:flex;gap:6px;overflow-x:auto;flex:0 0 auto;padding-bottom:2px;scrollbar-width:none}.levels::-webkit-scrollbar{display:none}.level-btn{min-width:34px;height:34px;padding:0;border-radius:12px;background:rgba(0,25,18,.64);border:1px solid var(--line);color:var(--txt)}.level-btn.active{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#201402}
+.scene{position:relative;flex:1;min-height:0;border-radius:28px 28px 38px 38px;border:2px solid rgba(255,229,141,.34);background:
+  radial-gradient(circle at 50% 11%,rgba(255,255,255,.12),transparent 25%),linear-gradient(180deg,rgba(5,91,55,.88),rgba(7,125,72,.70));box-shadow:inset 0 0 36px rgba(255,255,255,.04),0 22px 65px rgba(0,0,0,.35);overflow:hidden}
+.scene:before{content:"☾";position:absolute;top:3px;left:50%;transform:translateX(-50%);font-size:48px;color:rgba(255,226,122,.92);text-shadow:0 0 18px rgba(255,226,122,.35);z-index:0}.scene:after{content:"";position:absolute;left:8%;right:8%;bottom:8px;height:54px;border:4px solid rgba(255,226,122,.72);border-top:0;border-radius:0 0 50% 50%;opacity:.7;pointer-events:none}
+.lantern{position:absolute;top:18px;width:18px;height:44px;border-radius:9px;background:linear-gradient(90deg,#b78021,#ffeaa0,#d99c22);box-shadow:0 0 20px rgba(255,226,122,.45);z-index:0}.lantern:before{content:"";position:absolute;top:-24px;left:8px;width:1px;height:24px;background:rgba(255,226,122,.55)}.lantern.l1{left:9%}.lantern.l2{right:12%;top:21px}.lantern.l3{left:83%;top:5px;transform:scale(.62);opacity:.72}
+.board{position:absolute;left:50%;top:50%;transform:translate(-50%,-47%);width:calc(var(--sx)*11 + var(--tw) + var(--lx)*5);height:calc(var(--sy)*13 + var(--th) + 4px);max-width:96%;max-height:86%;}
+.tile{position:absolute;width:var(--tw);height:var(--th);left:calc(var(--x)*var(--sx) + var(--z)*var(--lx));top:calc(var(--y)*var(--sy) + var(--z)*var(--ly));z-index:calc(var(--z)*1000 + var(--y)*24 + var(--x));border-radius:calc(var(--tw)*.16);border:1px solid rgba(255,255,255,.72);background:linear-gradient(145deg,rgba(255,255,255,.96),rgba(235,248,237,.98) 48%,rgba(195,219,204,.94));display:grid;place-items:center;color:#143e35;font-size:calc(var(--tw)*.46);font-weight:1000;line-height:.9;box-shadow:calc(var(--tw)*.10) calc(var(--tw)*.12) 0 rgba(45,66,52,.58),0 8px 17px rgba(0,0,0,.36),inset -3px -5px 0 rgba(0,0,0,.10),inset 3px 3px 0 rgba(255,255,255,.88);transition:transform .14s ease,opacity .2s ease,filter .14s ease,border-color .14s ease}.tile .sub{position:absolute;top:7%;left:10%;font-size:.32em;opacity:.72}.tile.red{color:#ba0f24}.tile.green{color:#077f3f}.tile.blue{color:#10408f}.tile.gold{color:#a56d10}.tile.free{cursor:pointer}.tile.free:hover{transform:translateY(-4px) scale(1.02)}.tile.locked{filter:grayscale(.42) brightness(.60);cursor:not-allowed}.tile.selected{transform:translateY(-8px) scale(1.05);border-color:#ffe47c;box-shadow:calc(var(--tw)*.10) calc(var(--tw)*.12) 0 rgba(45,66,52,.58),0 0 28px rgba(255,226,122,.78),inset -3px -5px 0 rgba(0,0,0,.10),inset 3px 3px 0 rgba(255,255,255,.88)}.tile.hint{border-color:#69ffc0;box-shadow:calc(var(--tw)*.10) calc(var(--tw)*.12) 0 rgba(45,66,52,.58),0 0 24px rgba(105,255,192,.75),inset -3px -5px 0 rgba(0,0,0,.10),inset 3px 3px 0 rgba(255,255,255,.88)}.tile.removed{pointer-events:none;opacity:0;transform:scale(.72)}
+.message{min-height:42px;flex:0 0 auto;background:rgba(0,25,18,.72);border:1px solid var(--line);border-radius:17px;padding:10px 12px;text-align:center;color:var(--dim);line-height:1.3;font-size:13px}.message strong{color:#fff}.win{color:#69ffc0!important}.shake{animation:shake .22s ease}@keyframes shake{0%,100%{margin-left:0}25%{margin-left:-5px}75%{margin-left:5px}}
+.match-pop{position:absolute;inset:0;z-index:500;display:none;align-items:center;justify-content:center;gap:8px;pointer-events:none;background:radial-gradient(circle,rgba(255,226,122,.20),transparent 34%)}.match-pop.show{display:flex;animation:popbg .55s ease both}.big-tile{width:calc(var(--tw)*1.65);height:calc(var(--th)*1.65);border-radius:18px;background:linear-gradient(145deg,#fff,#edf8ed 55%,#cfe5d5);display:grid;place-items:center;font-size:calc(var(--tw)*.82);font-weight:1000;color:#143e35;box-shadow:0 0 25px rgba(255,226,122,.75),0 14px 24px rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.85);animation:bigtile .55s ease both}.spark{position:absolute;font-size:22px;animation:spark .55s ease both}.spark.s1{left:28%;top:42%}.spark.s2{right:30%;top:39%;animation-delay:.05s}.spark.s3{left:44%;bottom:33%;animation-delay:.08s}@keyframes bigtile{0%{transform:scale(.78);opacity:0}35%{transform:scale(1.05);opacity:1}100%{transform:scale(.92);opacity:0}}@keyframes popbg{0%{opacity:0}35%{opacity:1}100%{opacity:0}}@keyframes spark{0%{transform:translateY(8px) scale(.7);opacity:0}45%{opacity:1}100%{transform:translateY(-28px) scale(1.35);opacity:0}}
+@media(max-width:390px){:root{--tw:clamp(34px,9.75vw,43px)}.app{padding:8px}.title h1{font-size:15px}.controls{grid-template-columns:repeat(2,1fr)}.stats{grid-template-columns:repeat(4,1fr)}.scene:before{font-size:40px}.board{transform:translate(-50%,-46%)}}
+@media(min-width:720px){.app{max-width:620px}:root{--tw:58px}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <button class="back" onclick="goBack()">←</button>
+    <div class="title"><h1>Mahjong Solitaire</h1><p id="levelName">10 bentuk berbeda, pilih ubin yang bebas.</p></div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><span>Bentuk</span><strong id="levelText">1</strong></div>
+    <div class="stat"><span>Pair</span><strong id="pairsText">0</strong></div>
+    <div class="stat"><span>Langkah</span><strong id="movesText">0</strong></div>
+    <div class="stat"><span>Waktu</span><strong id="timeText">00:00</strong></div>
+  </div>
+
+  <div class="controls">
+    <button onclick="newGame()">Baru</button>
+    <button class="ghost" onclick="showHint()">Hint</button>
+    <button class="ghost" onclick="shuffleBoard()">Shuffle</button>
+    <button class="ghost" onclick="nextLevel()">Next Bentuk</button>
+  </div>
+
+  <div class="levels" id="levels"></div>
+
+  <div class="scene">
+    <span class="lantern l1"></span><span class="lantern l2"></span><span class="lantern l3"></span>
+    <div id="board" class="board"></div>
+    <div id="matchPop" class="match-pop"><div id="bigA" class="big-tile"></div><div id="bigB" class="big-tile"></div><span class="spark s1">🌟</span><span class="spark s2">✨</span><span class="spark s3">🏮</span></div>
+  </div>
+
+  <div id="message" class="message">Pilih 2 ubin yang sama. Ubin gelap masih terkunci.</div>
+</div>
+
+<script>
+const TILE_TYPES=[
+  {face:'一萬',color:'blue'},{face:'二萬',color:'red'},{face:'三萬',color:'red'},{face:'四萬',color:'blue'},{face:'五萬',color:'red'},{face:'六萬',color:'blue'},{face:'八萬',color:'red'},{face:'九萬',color:'blue'},
+  {face:'中',color:'red'},{face:'南',color:'blue'},{face:'發',color:'green'},{face:'◎',color:'blue'},{face:'◉',color:'green'},{face:'❀',color:'red'},{face:'▥',color:'green'},{face:'竹',color:'green'},{face:'龍',color:'red'},{face:'月',color:'gold'},{face:'星',color:'gold'},{face:'梅',color:'blue'},{face:'蘭',color:'green'},{face:'春',color:'red'}
+];
+
+function rect(x1,y1,x2,y2,z=0){const a=[];for(let y=y1;y<=y2;y++)for(let x=x1;x<=x2;x++)a.push({x,y,z});return a}
+function pts(list,z=0){return list.map(([x,y])=>({x,y,z}))}
+function uniqueEven(list){const m=new Map();list.forEach(p=>m.set(`${p.x},${p.y},${p.z}`,p));let arr=[...m.values()].sort((a,b)=>a.z-b.z||a.y-b.y||a.x-b.x);if(arr.length%2)arr.pop();return centerLayout(arr)}
+function centerLayout(arr){if(!arr.length)return arr;const xs=arr.map(p=>p.x),ys=arr.map(p=>p.y);const minX=Math.min(...xs),maxX=Math.max(...xs),minY=Math.min(...ys),maxY=Math.max(...ys);const dx=(10-(minX+maxX))/2;const dy=(11-(minY+maxY))/2;return arr.map(p=>({x:+(p.x+dx).toFixed(2),y:+(p.y+dy).toFixed(2),z:p.z}))}
+
+const LEVELS=[
+  {name:'Ramah Mata', build(){return uniqueEven([
+    ...pts([[5,0],[4,1],[5,1],[6,1],[3,2],[4,2],[5,2],[6,2],[7,2],[2,3],[3,3],[4,3],[5,3],[6,3],[7,3],[8,3],[1,4],[2,4],[3,4],[4,4],[5,4],[6,4],[7,4],[8,4],[9,4],[2,5],[3,5],[4,5],[5,5],[6,5],[7,5],[8,5],[3,6],[4,6],[5,6],[6,6],[7,6],[4,7],[5,7],[6,7],[5,8]],0),
+    ...pts([[3,2],[4,2],[6,2],[7,2],[2,3],[3,3],[7,3],[8,3],[2,5],[3,5],[7,5],[8,5],[3,6],[4,6],[6,6],[7,6]],1),
+    ...rect(4,3,6,5,2), ...pts([[5,4]],3)
+  ])}},
+  {name:'Ubin Besar', build(){return uniqueEven([
+    ...rect(1,0,8,1,0),...rect(0,4,9,5,0),...rect(1,9,8,10,0),...rect(3,2,6,7,0),
+    ...rect(2,3,7,5,1),...rect(3,7,6,8,1),...rect(3,4,6,5,2),...rect(4,4,5,5,3)
+  ])}},
+  {name:'Latih Otak Anda', build(){return uniqueEven([
+    ...pts([[0,3],[1,2],[1,3],[1,4],[2,1],[2,2],[2,3],[2,4],[2,5],[3,2],[3,3],[3,4],[4,3], [10,3],[9,2],[9,3],[9,4],[8,1],[8,2],[8,3],[8,4],[8,5],[7,2],[7,3],[7,4],[6,3]],0),
+    ...rect(3,5,7,8,0),...pts([[4,9],[5,9],[6,9],[5,10]],0),
+    ...pts([[2,2],[2,3],[3,3],[8,2],[8,3],[7,3],[4,5],[5,5],[6,5],[3,6],[7,6],[4,8],[5,8],[6,8]],1),
+    ...rect(4,6,6,7,2),...pts([[5,6],[5,7]],3)
+  ])}},
+  {name:'Tantangan Harian', build(){return uniqueEven([
+    ...rect(0,1,2,6,0),...rect(8,1,10,6,0),...rect(3,4,7,7,0),...rect(4,8,6,10,0),
+    ...pts([[1,0],[9,0],[1,7],[9,7],[3,8],[7,8]],0),
+    ...rect(1,2,2,5,1),...rect(8,2,9,5,1),...rect(4,4,6,6,1),...rect(4,7,6,8,1),
+    ...pts([[1,3],[9,3],[5,5],[5,6]],2),...pts([[5,5]],3)
+  ])}},
+  {name:'Bulan Sabit', build(){return uniqueEven([
+    ...pts([[2,1],[3,0],[4,0],[5,0],[6,1],[1,2],[2,2],[6,2],[7,2],[0,3],[1,3],[6,3],[7,3],[8,3],[0,4],[1,4],[5,4],[6,4],[7,4],[0,5],[1,5],[5,5],[6,5],[7,5],[1,6],[2,6],[6,6],[7,6],[2,7],[3,8],[4,8],[5,8],[6,7]],0),
+    ...pts([[2,2],[3,1],[4,1],[5,1],[1,3],[2,3],[6,3],[1,4],[6,4],[1,5],[2,5],[6,5],[2,6],[3,7],[4,7],[5,7]],1),
+    ...pts([[3,2],[4,2],[5,2],[2,4],[5,4],[3,6],[4,6],[5,6]],2),...pts([[4,4],[5,4]],3)
+  ])}},
+  {name:'Piramida Emas', build(){return uniqueEven([
+    ...rect(1,9,9,10,0),...rect(2,7,8,8,0),...rect(3,5,7,6,0),...rect(4,3,6,4,0),...rect(5,1,5,2,0),
+    ...rect(2,8,8,9,1),...rect(3,6,7,7,1),...rect(4,4,6,5,1),...rect(5,2,5,3,1),
+    ...rect(3,7,7,8,2),...rect(4,5,6,6,2),...rect(5,4,5,4,3)
+  ])}},
+  {name:'Gerbang Emas', build(){return uniqueEven([
+    ...rect(0,2,2,9,0),...rect(8,2,10,9,0),...rect(2,0,8,2,0),...rect(3,6,7,10,0),
+    ...pts([[4,3],[5,3],[6,3],[3,4],[7,4],[3,5],[7,5]],0),
+    ...rect(1,3,2,8,1),...rect(8,3,9,8,1),...rect(3,1,7,2,1),...rect(4,6,6,8,1),
+    ...rect(4,2,6,3,2),...pts([[2,5],[8,5],[5,7]],2),...pts([[5,2],[5,3]],3)
+  ])}},
+  {name:'Kupu-Kupu', build(){return uniqueEven([
+    ...pts([[1,1],[2,1],[1,2],[2,2],[3,2],[1,3],[2,3],[3,3],[0,4],[1,4],[2,4],[3,4],[4,4],[1,5],[2,5],[3,5],[1,6],[2,6], [9,1],[8,1],[9,2],[8,2],[7,2],[9,3],[8,3],[7,3],[10,4],[9,4],[8,4],[7,4],[6,4],[9,5],[8,5],[7,5],[9,6],[8,6]],0),
+    ...rect(4,3,6,6,0),...pts([[2,2],[2,3],[2,4],[8,2],[8,3],[8,4],[4,4],[5,4],[6,4],[5,5]],1),
+    ...pts([[3,3],[7,3],[4,4],[5,4],[6,4],[3,5],[7,5]],2),...pts([[5,4],[5,5]],3)
+  ])}},
+  {name:'Menara Kembar', build(){return uniqueEven([
+    ...rect(1,0,3,8,0),...rect(7,0,9,8,0),...rect(3,5,7,8,0),...pts([[0,2],[10,2],[0,6],[10,6]],0),
+    ...rect(2,1,3,7,1),...rect(7,1,8,7,1),...rect(4,5,6,7,1),
+    ...pts([[2,2],[3,2],[7,2],[8,2],[4,6],[5,6],[6,6]],2),...pts([[2,3],[8,3],[5,6]],3)
+  ])}},
+  {name:'Bintang Timur', build(){return uniqueEven([
+    ...pts([[5,0],[4,1],[5,1],[6,1],[3,2],[4,2],[5,2],[6,2],[7,2],[0,5],[1,5],[2,5],[3,5],[4,5],[5,5],[6,5],[7,5],[8,5],[9,5],[10,5],[3,8],[4,8],[5,8],[6,8],[7,8],[4,9],[5,9],[6,9],[5,10],[2,3],[8,3],[1,4],[9,4],[2,7],[8,7],[1,6],[9,6]],0),
+    ...pts([[5,2],[4,3],[5,3],[6,3],[3,4],[4,4],[5,4],[6,4],[7,4],[3,6],[4,6],[5,6],[6,6],[7,6],[4,7],[5,7],[6,7],[5,8]],1),
+    ...rect(4,4,6,6,2),...pts([[5,5]],3)
+  ])}}
+];
+
+let levelIndex=0, tiles=[], selectedId=null, moves=0, seconds=0, timer=null, gameStarted=false, busy=false;
+const boardEl=document.getElementById('board'), pairsText=document.getElementById('pairsText'), movesText=document.getElementById('movesText'), timeText=document.getElementById('timeText'), levelText=document.getElementById('levelText'), levelName=document.getElementById('levelName'), msg=document.getElementById('message');
+const pop=document.getElementById('matchPop'), bigA=document.getElementById('bigA'), bigB=document.getElementById('bigB');
+
+function goBack(){try{if(window.parent&&window.parent!==window&&typeof window.parent.closeGame==='function'){window.parent.closeGame();return}}catch(e){} location.href='../home.html'}
+function shuffle(a){const c=[...a];for(let i=c.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[c[i],c[j]]=[c[j],c[i]]}return c}
+function startTimer(){if(timer)return;timer=setInterval(()=>{seconds++;updateTime()},1000)}
+function stopTimer(){clearInterval(timer);timer=null}function updateTime(){const m=String(Math.floor(seconds/60)).padStart(2,'0'),s=String(seconds%60).padStart(2,'0');timeText.textContent=m+':'+s}
+function makeDeck(n){const pairs=n/2;const chosen=[];for(let i=0;i<pairs;i++)chosen.push(TILE_TYPES[i%TILE_TYPES.length]);return shuffle([...chosen,...chosen]).map(t=>({...t,matchKey:t.face}))}
+function makeLevelButtons(){document.getElementById('levels').innerHTML=LEVELS.map((l,i)=>`<button class="level-btn ${i===levelIndex?'active':''}" onclick="setLevel(${i})">${i+1}</button>`).join('')}
+function setLevel(i){levelIndex=i;newGame()}
+function nextLevel(){levelIndex=(levelIndex+1)%LEVELS.length;newGame()}
+function newGame(){stopTimer();moves=0;seconds=0;selectedId=null;gameStarted=false;busy=false;const layout=LEVELS[levelIndex].build();const deck=makeDeck(layout.length);tiles=layout.map((p,i)=>({id:i,x:p.x,y:p.y,z:p.z,face:deck[i].face,color:deck[i].color,matchKey:deck[i].matchKey,removed:false}));levelText.textContent=levelIndex+1;levelName.textContent=LEVELS[levelIndex].name;movesText.textContent=moves;updateTime();makeLevelButtons();setMessage('Bentuk '+(levelIndex+1)+': <strong>'+LEVELS[levelIndex].name+'</strong>. Pilih ubin terang yang sama.');render()}
+function render(){boardEl.innerHTML='';tiles.forEach(t=>{const el=document.createElement('div');el.className='tile '+(t.color||'');el.dataset.id=t.id;el.style.setProperty('--x',t.x);el.style.setProperty('--y',t.y);el.style.setProperty('--z',t.z);if(t.removed){el.classList.add('removed')}else{el.innerHTML='<span>'+t.face+'</span>';if(isFree(t)){el.classList.add('free');el.onclick=()=>selectTile(t.id)}else{el.classList.add('locked');el.onclick=()=>setMessage('Ubin itu masih terkunci. Cari yang tidak tertutup dan salah satu sisi kiri/kanannya kosong.')}if(selectedId===t.id)el.classList.add('selected')}boardEl.appendChild(el)});pairsText.textContent=tiles.filter(t=>!t.removed).length/2}
+function overlaps(a,b){return Math.abs(a.x-b.x)<.9&&Math.abs(a.y-b.y)<.9}function hasAbove(t){return tiles.some(o=>!o.removed&&o.z>t.z&&overlaps(t,o))}function sideBlocked(t,dir){const sx=t.x+dir;return tiles.some(o=>!o.removed&&o.id!==t.id&&o.z===t.z&&Math.abs(o.x-sx)<.65&&Math.abs(o.y-t.y)<.65)}function isFree(t){return t&&!t.removed&&!hasAbove(t)&&(!sideBlocked(t,-1)||!sideBlocked(t,1))}
+function selectTile(id){if(busy)return;const t=tiles.find(x=>x.id===id);if(!t||t.removed||!isFree(t))return;if(!gameStarted){gameStarted=true;startTimer()}clearHints();if(selectedId===null){selectedId=id;setMessage('Pilih pasangan ubin yang sama.');render();return}if(selectedId===id){selectedId=null;render();return}const a=tiles.find(x=>x.id===selectedId),b=t;moves++;movesText.textContent=moves;if(a&&a.matchKey===b.matchKey){busy=true;showMatch(a,b);setTimeout(()=>{a.removed=true;b.removed=true;selectedId=null;busy=false;setMessage('Cocok! Ubin berhasil dihapus.');render();checkState()},520)}else{const old=selectedId;selectedId=null;render();shakeTiles(old,id);setMessage('Belum cocok. Coba pasangan lain.')}}
+function showMatch(a,b){bigA.textContent=a.face;bigB.textContent=b.face;bigA.className='big-tile '+(a.color||'');bigB.className='big-tile '+(b.color||'');pop.classList.remove('show');void pop.offsetWidth;pop.classList.add('show');setTimeout(()=>pop.classList.remove('show'),560)}
+function shakeTiles(a,b){[a,b].forEach(id=>{const el=document.querySelector(`.tile[data-id="${id}"]`);if(el){el.classList.add('shake');setTimeout(()=>el.classList.remove('shake'),250)}})}
+function freeTiles(){return tiles.filter(t=>!t.removed&&isFree(t))}function findHint(){const f=freeTiles();for(let i=0;i<f.length;i++)for(let j=i+1;j<f.length;j++)if(f[i].matchKey===f[j].matchKey)return[f[i].id,f[j].id];return null}
+function showHint(){clearHints();const h=findHint();if(!h){setMessage('Tidak ada pasangan bebas. Tekan Shuffle untuk lanjut.');return}h.forEach(id=>{const el=document.querySelector(`.tile[data-id="${id}"]`);if(el)el.classList.add('hint')});setMessage('Ini pasangan yang bisa dipilih.');setTimeout(clearHints,1500)}function clearHints(){document.querySelectorAll('.tile.hint').forEach(e=>e.classList.remove('hint'))}
+function shuffleBoard(){const active=tiles.filter(t=>!t.removed);const deck=shuffle(active.map(t=>({face:t.face,color:t.color,matchKey:t.matchKey})));active.forEach((t,i)=>{t.face=deck[i].face;t.color=deck[i].color;t.matchKey=deck[i].matchKey});selectedId=null;moves++;movesText.textContent=moves;render();setMessage('Ubin tersisa sudah diacak ulang.')}
+function checkState(){const remaining=tiles.filter(t=>!t.removed).length;if(remaining===0){stopTimer();setMessage('<strong class="win">Menang!</strong> Bentuk '+(levelIndex+1)+' selesai dalam '+moves+' langkah. Tekan Next untuk bentuk berikutnya.');return}if(!findHint())setMessage('Tidak ada pasangan bebas. Tekan Shuffle supaya bisa lanjut.')}function setMessage(t){msg.innerHTML=t}
+newGame();
+</script>
+</body>
+</html>
