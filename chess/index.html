@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Catur</title>
+  <link rel="stylesheet" href="style.css">
+<script>
+(function(){
+  document.addEventListener('gesturestart',function(e){e.preventDefault()},{passive:false});
+  document.addEventListener('gesturechange',function(e){e.preventDefault()},{passive:false});
+  document.addEventListener('wheel',function(e){if(e.ctrlKey)e.preventDefault()},{passive:false});
+  let lastTouchEnd=0;
+  document.addEventListener('touchend',function(e){const now=Date.now();if(now-lastTouchEnd<=330)e.preventDefault();lastTouchEnd=now},{passive:false});
+})();
+</script>
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="menu-btn" onclick="toggleMenu()">☰</div>
+  </div>
+
+  <div class="mode-menu hidden" id="mode-menu">
+    <h3>PILIH MODE</h3>
+    <button onclick="startPVP()">👥 PvP</button>
+    <button onclick="startAI('easy')">🤖 Easy</button>
+    <button onclick="startAI('medium')">🧠 Medium</button>
+    <button onclick="startAI('hard')">💀 Hard</button>
+  </div>
+
+  <div id="thinking" class="thinking hidden">🤖 AI sedang berpikir...</div>
+
+  <div class="page">
+    <button class="back" onclick="window.parent.postMessage('game:close','*')" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:9px 16px;color:#aaa;font-size:12px;letter-spacing:.1em;cursor:pointer;font-family:inherit">← Kembali</button>
+
+    <div class="title">
+      <h1>♟ CATUR</h1>
+      <p>Two Player Chess</p>
+    </div>
+
+    <div class="captured-row">
+      <span class="cap-label">Putih merebut:</span>
+      <span id="captured-w"></span>
+    </div>
+
+    <div class="board-outer">
+      <div class="rank-labels" id="rank-labels"></div>
+      <div>
+        <div class="board" id="board"></div>
+        <div class="file-labels" id="file-labels"></div>
+      </div>
+    </div>
+
+    <div class="captured-row">
+      <span class="cap-label">Hitam merebut:</span>
+      <span id="captured-b"></span>
+    </div>
+
+    <div class="status" id="status"></div>
+
+    <div class="btn-row">
+      <button class="btn btn-undo" id="btn-undo" disabled>↩ Undo</button>
+      <button class="btn btn-sec" id="btn-reset">↺ Ulang</button>
+    </div>
+  </div>
+
+  <!-- Promotion Modal -->
+  <div class="modal-overlay" id="promotion-modal" style="display:none">
+    <div class="modal">
+      <div class="modal-title">PILIH PROMOSI</div>
+      <div class="modal-btns">
+        <button class="promo-btn" data-type="q"></button>
+        <button class="promo-btn" data-type="r"></button>
+        <button class="promo-btn" data-type="b"></button>
+        <button class="promo-btn" data-type="n"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- game.js DULU, baru bot.js -->
+  <script src="game.js"></script>
+  <script src="bot.js"></script>
+</body>
+</html>
