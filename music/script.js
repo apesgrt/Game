@@ -403,6 +403,19 @@ function playByGlobalIndex(idx, startTime = 0, startPaused = false) {
   currentAudio.playsInline = true;
   currentAudio.src = getPlayableSrc(song);
 
+  // Guard: pastikan play() hanya dipanggil SATU kali per audio instance.
+  // Tanpa ini, canplay + langsung play() + pause autoResume jalan bersamaan
+  // dan menyebabkan stop-mulai-stop-mulai di Android Chrome.
+  let playInitiated = false;
+  const safePlay = () => {
+    if (playInitiated) return;
+    playInitiated = true;
+    currentAudio.play().catch(err => {
+      playInitiated = false; // reset agar canplay bisa retry
+      showAudioPlayError(err);
+    });
+  };
+
   currentAudio.addEventListener('loadedmetadata', () => {
     if (token !== audioPlayToken || !currentAudio) return;
     $('timeTotal').textContent = fmtTime(currentAudio.duration);
@@ -410,37 +423,36 @@ function playByGlobalIndex(idx, startTime = 0, startPaused = false) {
       try { currentAudio.currentTime = Math.min(startTime, Math.max(0, currentAudio.duration - 0.5)); } catch {}
     }
   });
+
+  // canplay hanya jadi fallback jika play() langsung ditolak (autoplay policy).
+  // Tidak boleh fire ulang-ulang — safePlay() sudah menjaga itu.
   currentAudio.addEventListener('canplay', () => {
     if (token === audioPlayToken && desiredPlaying && currentAudio?.paused) {
-      currentAudio.play().catch(()=>{});
+      safePlay();
     }
   });
+
   currentAudio.addEventListener('timeupdate', updateProgress);
   currentAudio.addEventListener('ended', onEnded);
   currentAudio.addEventListener('error', () => handleAudioError(song, token));
   currentAudio.addEventListener('stalled', () => {
-    if (token === audioPlayToken) showStatus('Koneksi audio tersendat. Player mencoba lanjut otomatis...', 'err');
+    if (token === audioPlayToken) showStatus('Koneksi audio tersendat...', 'err');
   });
+
   currentAudio.addEventListener('play', () => {
-    if (token === audioPlayToken) {
-      desiredPlaying = true;
-      autoResumeTries = 0;
-      markPlayingUI(true);
-      renderList();
-    }
+    if (token !== audioPlayToken) return;
+    playInitiated = true;
+    desiredPlaying = true;
+    markPlayingUI(true);
+    renderList();
   });
+
+  // pause handler: autoResume DIHAPUS.
+  // autoResume (setTimeout 450ms + play) adalah penyebab utama stop-mulai-stop.
+  // Android Chrome kadang fire 'pause' natural saat buffering, lalu lanjut sendiri.
+  // Paksa resume justru menginterupsi proses itu.
   currentAudio.addEventListener('pause', () => {
     if (token !== audioPlayToken) return;
-    const actuallyEnded = currentAudio?.ended || (Number.isFinite(currentAudio?.duration) && currentAudio.currentTime >= currentAudio.duration - 0.2);
-    if (desiredPlaying && !actuallyEnded && autoResumeTries < 2) {
-      autoResumeTries++;
-      setTimeout(() => {
-        if (token === audioPlayToken && desiredPlaying && currentAudio?.paused && !currentAudio.ended) {
-          currentAudio.play().catch(()=>{});
-        }
-      }, 450);
-      return;
-    }
     markPlayingUI(false);
     renderList();
   });
@@ -454,7 +466,7 @@ function playByGlobalIndex(idx, startTime = 0, startPaused = false) {
   renderList();
 
   if (!startPaused) {
-    currentAudio.play().catch(err => showAudioPlayError(err));
+    safePlay();
   }
 }
 
