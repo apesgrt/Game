@@ -97,6 +97,7 @@ button{border:0;cursor:pointer;color:inherit}
   border:1px solid rgba(255,255,255,.13);box-shadow:0 18px 70px rgba(0,0,0,.32),inset 0 1px 0 rgba(255,255,255,.06);
   animation:slideUp .58s ease .06s both;
 }
+.profile-card[data-theme="blue"]{--a:#2563eb;--b:#06b6d4;--c:#60a5fa}.profile-card[data-theme="pink"]{--a:#ec4899;--b:#a855f7;--c:#fb7185}.profile-card[data-theme="green"]{--a:#10b981;--b:#06b6d4;--c:#84cc16}.profile-card[data-theme="gold"]{--a:#f59e0b;--b:#facc15;--c:#fb923c}
 .profile-card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 10%,rgba(88,101,242,.25),transparent 34%),radial-gradient(circle at 90% 20%,rgba(236,72,153,.18),transparent 32%);pointer-events:none}
 .profile-card::after{content:'';position:absolute;left:0;right:0;top:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent)}
 .profile-main{position:relative;display:flex;gap:13px;align-items:center}
@@ -229,6 +230,13 @@ footer{text-align:center;font-size:11px;color:rgba(255,255,255,.14);letter-spaci
 .admin-preview span{display:block;font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.38);font-weight:950;margin-bottom:6px}
 .admin-preview strong{display:block;color:#fff;font-size:14px;line-height:1.35}
 
+
+.admin-tools{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.admin-list{display:grid;gap:8px;margin-top:10px;max-height:190px;overflow:auto}
+.admin-game-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px;border-radius:15px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.08);font-size:12px;color:rgba(255,255,255,.72)}
+.admin-game-row strong{color:#fff}.admin-game-row button{padding:8px 10px;border-radius:12px;background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.22);color:#ffd1d1;font-weight:900}
+.profile-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}.profile-tab{border-radius:14px;padding:10px 8px;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.09);color:rgba(255,255,255,.7);font-size:11px;font-weight:950}.profile-tab.active{background:rgba(88,101,242,.18);border-color:rgba(88,101,242,.32);color:#dbe2ff}
+.account-mini{padding:11px 12px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);font-size:12px;line-height:1.45;color:rgba(255,255,255,.65);margin-bottom:12px}
 </style>
 <script>
 (function(){
@@ -301,61 +309,7 @@ footer{text-align:center;font-size:11px;color:rgba(255,255,255,.14);letter-spaci
     </div>
 
     <div class="sec-label">GAMES</div>
-    <div class="games-grid">
-      <div class="game-card" data-color="ttt" onclick="openGame('tictactoe/index.html','Tic Tac Toe')">
-        <div class="card-icon">❌</div>
-        <div class="card-body"><h2>Tic Tac Toe</h2><p>Strategi klasik 3×3, siapa yang duluan sejajarkan 3?</p></div>
-        <button class="card-btn">MAIN</button>
-      </div>
-
-      <div class="game-card" data-color="luncur" onclick="openGame('luncur/index.html','Luncur')">
-        <div class="card-icon">🔵</div>
-        <div class="card-body"><h2>Luncur</h2><p>Geser bidak, susun warna, raih kemenangan.</p></div>
-        <button class="card-btn">MAIN</button>
-      </div>
-
-      <div class="game-card" data-color="chess" onclick="openGame('chess/index.html','Chess')">
-        <div class="card-icon">♟️</div>
-        <div class="card-body"><h2>Chess</h2><p>Catur modern lengkap dengan bot AI 3 level.</p></div>
-        <button class="card-btn">MAIN</button>
-      </div>
-
-      <div class="game-card" data-color="race" onclick="openGame('racing/index.html','Road Rush')">
-        <div class="card-icon">🏎️</div>
-        <div class="card-body"><h2>Road Rush</h2><p>Balap mobil, hindari rintangan, raih skor tertinggi.</p></div>
-        <button class="card-btn">MAIN</button>
-      </div>
-
-      <div class="game-card" data-color="blast" onclick="openGame('BlockBlast/block-blast.html','Block Blast')">
-        <div class="card-icon">🟦</div>
-        <div class="card-body"><h2>Block Blast</h2><p>Drag &amp; drop blok ke grid, isi baris &amp; kolom untuk blast!</p></div>
-        <button class="card-btn">MAIN</button>
-      </div>
-
-      <div class="game-card" data-color="pac" onclick="openGame('pacman/index.html','Pac-Man')">
-        <div class="card-icon">👾</div>
-        <div class="card-body"><h2>Pac-Man</h2><p>Makan semua titik, hindari 4 hantu. Maze baru tiap ronde!</p></div>
-        <button class="card-btn">MAIN</button>
-      </div>
-
-      <div class="game-card" data-color="space" onclick="openGame('spaceshoot/index.html','SpaceShooter')">
-        <div class="card-icon">🚀</div>
-        <div class="card-body"><h2>SpaceShooter</h2><p>Tembak kapal lain, pilih kapal menarik, dan kalahkan Boss!</p></div>
-        <button class="card-btn">MAIN</button>
-      </div>
-
-      <div class="game-card" data-color="mahjong" onclick="openGame('mahjong/index.html','Mahjong Solitaire')">
-        <div class="card-icon">🀄</div>
-        <div class="card-body"><h2>Mahjong Solitaire</h2><p>Cocokkan ubin bertingkat dengan banyak bentuk baru.</p></div>
-        <button class="card-btn">MAIN</button>
-      </div>
-
-      <div class="game-card" data-color="spy" onclick="openGame('Spy/index.html', &quot;Who&apos;s The Spy&quot;)">
-        <div class="card-icon">🕵️</div>
-        <div class="card-body"><h2>Who&apos;s The Spy</h2><p>Room code online, kata dan spy ditentukan otomatis oleh sistem.</p></div>
-        <button class="card-btn">MAIN</button>
-      </div>
-    </div>
+    <div class="games-grid" id="gamesGrid"></div>
 
     <div class="sec-label">TOOLS</div>
     <div class="games-grid">
@@ -386,6 +340,7 @@ footer{text-align:center;font-size:11px;color:rgba(255,255,255,.14);letter-spaci
       <h3>Edit Profil</h3>
       <button class="close-btn" type="button" onclick="closeProfileModal()">×</button>
     </div>
+    <div class="account-mini" id="accountMiniText">Profil ini tersimpan terpisah untuk setiap akun.</div>
 
     <div class="profile-edit-avatar">
       <div class="avatar-preview" id="editAvatarPreview">G</div>
@@ -417,6 +372,26 @@ footer{text-align:center;font-size:11px;color:rgba(255,255,255,.14);letter-spaci
         </select>
       </div>
       <div class="field">
+        <label>Badge</label>
+        <select id="editBadge">
+          <option value="PLAYER">PLAYER</option>
+          <option value="PRO">PRO</option>
+          <option value="CREATOR">CREATOR</option>
+          <option value="NOOB">NOOB</option>
+          <option value="ADMIN">ADMIN</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Warna Profil</label>
+        <select id="editTheme">
+          <option value="default">Default</option>
+          <option value="blue">Blue</option>
+          <option value="pink">Pink</option>
+          <option value="green">Green</option>
+          <option value="gold">Gold</option>
+        </select>
+      </div>
+      <div class="field">
         <label>Game Favorit</label>
         <select id="editFav">
           <option value="-">Belum ada</option>
@@ -428,6 +403,7 @@ footer{text-align:center;font-size:11px;color:rgba(255,255,255,.14);letter-spaci
           <option value="Pac-Man">Pac-Man</option>
           <option value="SpaceShooter">SpaceShooter</option>
           <option value="Mahjong Solitaire">Mahjong Solitaire</option>
+          <option value="Who's The Spy">Who's The Spy</option>
         </select>
       </div>
       <div class="field">
@@ -453,8 +429,7 @@ footer{text-align:center;font-size:11px;color:rgba(255,255,255,.14);letter-spaci
     </div>
 
     <div class="admin-note">
-      Login ini pakai <strong>Firebase Authentication</strong>. Akun admin yang diizinkan:
-      <strong>hahahacees@gmail.com</strong>
+      Login ini pakai <strong>Firebase Authentication</strong>. Email admin tidak ditampilkan demi privasi.
     </div>
 
     <div class="form-grid">
@@ -493,7 +468,7 @@ footer{text-align:center;font-size:11px;color:rgba(255,255,255,.14);letter-spaci
     </div>
 
     <div class="admin-note">
-      Khusus akun <strong>hahahacees@gmail.com</strong>. Setting disimpan di browser ini dulu.
+      Khusus admin. Email admin disembunyikan, dan setting masih disimpan di browser ini dulu.
     </div>
 
     <div class="admin-grid">
@@ -521,11 +496,33 @@ footer{text-align:center;font-size:11px;color:rgba(255,255,255,.14);letter-spaci
         <label>Footer</label>
         <input id="adminFooterText" type="text" maxlength="80" placeholder="© 2026 KeyzForge — Team & Community">
       </div>
+
+      <div class="field">
+        <label>Tambah Tombol Game Baru</label>
+        <input id="adminGameTitle" type="text" maxlength="32" placeholder="Nama game">
+      </div>
+      <div class="field">
+        <label>Path / Link Game</label>
+        <input id="adminGamePath" type="text" maxlength="140" placeholder="folder/index.html atau https://...">
+      </div>
+      <div class="field">
+        <label>Icon</label>
+        <input id="adminGameIcon" type="text" maxlength="4" placeholder="🎮">
+      </div>
+      <div class="field">
+        <label>Deskripsi Game</label>
+        <textarea id="adminGameDesc" maxlength="120" placeholder="Deskripsi singkat game..."></textarea>
+      </div>
+      <div class="admin-tools">
+        <button class="ghost-btn" type="button" onclick="addAdminGame()">+ Tambah Game</button>
+        <button class="ghost-btn" type="button" onclick="clearAdminGameForm()">Bersihkan</button>
+      </div>
+      <div class="admin-list" id="adminGamesList"></div>
     </div>
 
     <div class="admin-preview">
       <span>Admin aktif</span>
-      <strong id="adminActiveEmail">-</strong>
+      <strong id="adminActiveEmail">Terverifikasi</strong>
     </div>
 
     <div class="modal-actions">
@@ -555,7 +552,19 @@ let pendingAvatar = profile.avatar || '';
 let gameOpen = false;
 let musicOpen = false;
 
-const gamesCount = 8;
+const BASE_GAMES = [
+  {color:'ttt', icon:'❌', title:'Tic Tac Toe', desc:'Strategi klasik 3×3, siapa yang duluan sejajarkan 3?', path:'tictactoe/index.html'},
+  {color:'luncur', icon:'🔵', title:'Luncur', desc:'Geser bidak, susun warna, raih kemenangan.', path:'luncur/index.html'},
+  {color:'chess', icon:'♟️', title:'Chess', desc:'Catur modern lengkap dengan bot AI 3 level.', path:'chess/index.html'},
+  {color:'race', icon:'🏎️', title:'Road Rush', desc:'Balap mobil, hindari rintangan, raih skor tertinggi.', path:'racing/index.html'},
+  {color:'blast', icon:'🟦', title:'Block Blast', desc:'Drag & drop blok ke grid, isi baris & kolom untuk blast!', path:'BlockBlast/block-blast.html'},
+  {color:'pac', icon:'👾', title:'Pac-Man', desc:'Makan semua titik, hindari 4 hantu. Maze baru tiap ronde!', path:'pacman/index.html'},
+  {color:'space', icon:'🚀', title:'SpaceShooter', desc:'Tembak kapal lain, pilih kapal menarik, dan kalahkan Boss!', path:'spaceshoot/index.html'},
+  {color:'mahjong', icon:'🀄', title:'Mahjong Solitaire', desc:'Cocokkan ubin bertingkat dengan banyak bentuk baru.', path:'mahjong/index.html'},
+  {color:'spy', icon:'🕵️', title:"Who's The Spy", desc:'Room code online, kata dan spy ditentukan otomatis oleh sistem.', path:'Spy/index.html'}
+];
+const CUSTOM_GAMES_KEY = 'gameArchiveCustomGames_v1';
+let gamesCount = BASE_GAMES.length;
 
 const NO_LOGIN_CLEAN_KEY = 'gameArchiveNoLoginCleanup_v1';
 (function cleanupOldLoginSystem(){
@@ -576,15 +585,26 @@ const NO_LOGIN_CLEAN_KEY = 'gameArchiveNoLoginCleanup_v1';
   localStorage.setItem(NO_LOGIN_CLEAN_KEY, '1');
 })();
 
+function getActiveAccountId(){
+  return window.currentAuthUser?.uid ? 'uid_' + window.currentAuthUser.uid : 'guest';
+}
+function scopedKey(base){return base + '_' + getActiveAccountId();}
+function migrateLegacyProfile(){
+  if(getActiveAccountId() !== 'guest') return;
+  const old = localStorage.getItem(PROFILE_KEY);
+  if(old && !localStorage.getItem(scopedKey(PROFILE_KEY))) localStorage.setItem(scopedKey(PROFILE_KEY), old);
+}
 function loadProfile(){
-  try{return {...defaultProfile,...JSON.parse(localStorage.getItem(PROFILE_KEY)||'{}')};}
+  migrateLegacyProfile();
+  try{return {...defaultProfile,...JSON.parse(localStorage.getItem(scopedKey(PROFILE_KEY))||'{}')};}
   catch{return {...defaultProfile};}
 }
+function saveProfileData(data){localStorage.setItem(scopedKey(PROFILE_KEY), JSON.stringify(data));}
 function loadStats(){
-  try{return JSON.parse(localStorage.getItem(STATS_KEY)||'{"played":0,"history":[]}');}
+  try{return JSON.parse(localStorage.getItem(scopedKey(STATS_KEY))||'{"played":0,"history":[]}');}
   catch{return {played:0,history:[]};}
 }
-function saveStats(stats){localStorage.setItem(STATS_KEY, JSON.stringify(stats));}
+function saveStats(stats){localStorage.setItem(scopedKey(STATS_KEY), JSON.stringify(stats));}
 function safeText(text){return String(text||'').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 function initials(name){
   const cleaned = String(name||'G').trim();
@@ -602,11 +622,12 @@ function renderProfile(){
   document.getElementById('profileName').textContent = profile.name || defaultProfile.name;
   document.getElementById('profileUser').textContent = profile.user || defaultProfile.user;
   document.getElementById('profileBio').textContent = profile.bio || defaultProfile.bio;
-  document.getElementById('profileStatus').textContent = profile.status || 'ONLINE';
+  document.getElementById('profileStatus').textContent = profile.badge || profile.status || 'ONLINE';
   document.getElementById('statGames').textContent = gamesCount;
   document.getElementById('statPlayed').textContent = stats.played || 0;
   document.getElementById('statFav').textContent = shortFav(profile.favorite || '-');
   setAvatarContent(document.getElementById('profileAvatar'), profile.avatar, profile.name);
+  document.querySelector('.profile-card')?.setAttribute('data-theme', profile.theme || 'default');
 }
 function shortFav(name){
   if(!name || name === '-') return '-';
@@ -620,9 +641,13 @@ function openProfileModal(){
   document.getElementById('editName').value = profile.name || '';
   document.getElementById('editUser').value = profile.user || '';
   document.getElementById('editStatus').value = profile.status || 'ONLINE';
+  document.getElementById('editBadge').value = profile.badge || 'PLAYER';
+  document.getElementById('editTheme').value = profile.theme || 'default';
   document.getElementById('editFav').value = profile.favorite || '-';
   document.getElementById('editBio').value = profile.bio || '';
   setAvatarContent(document.getElementById('editAvatarPreview'), pendingAvatar, profile.name);
+  const mini = document.getElementById('accountMiniText');
+  if(mini) mini.textContent = getActiveAccountId() === 'guest' ? 'Mode Guest: profil tersimpan khusus Guest.' : 'Mode akun: profil, PP, dan statistik tersimpan khusus akun ini.'
   const modal = document.getElementById('profileModal');
   modal.classList.add('show');
   modal.setAttribute('aria-hidden','false');
@@ -685,10 +710,12 @@ function saveProfile(){
     user,
     status: document.getElementById('editStatus').value || 'ONLINE',
     favorite: document.getElementById('editFav').value || '-',
+    badge: document.getElementById('editBadge').value || 'PLAYER',
+    theme: document.getElementById('editTheme').value || 'default',
     bio: document.getElementById('editBio').value.trim() || defaultProfile.bio,
     avatar: pendingAvatar || ''
   };
-  localStorage.setItem(PROFILE_KEY, JSON.stringify(newProfile));
+  saveProfileData(newProfile);
   profile = newProfile;
   renderProfile();
   closeProfileModal();
@@ -702,9 +729,33 @@ function showToast(msg){
   showToast.t = setTimeout(()=>toast.classList.remove('show'),1700);
 }
 
+
+function loadCustomGames(){
+  try{return JSON.parse(localStorage.getItem(CUSTOM_GAMES_KEY)||'[]').filter(g=>g && g.title && g.path);}
+  catch{return [];}
+}
+function saveCustomGames(list){localStorage.setItem(CUSTOM_GAMES_KEY, JSON.stringify(list));}
+function allGames(){return [...BASE_GAMES, ...loadCustomGames()];}
+function renderGames(){
+  const grid = document.getElementById('gamesGrid');
+  if(!grid) return;
+  const games = allGames();
+  gamesCount = games.length;
+  grid.innerHTML = games.map(g => `
+    <div class="game-card" data-color="${safeText(g.color || 'space')}" onclick="openGame('${safeText(g.path).replace(/'/g,'&#39;')}','${safeText(g.title).replace(/'/g,'&#39;')}')">
+      <div class="card-icon">${safeText(g.icon || '🎮')}</div>
+      <div class="card-body"><h2>${safeText(g.title)}</h2><p>${safeText(g.desc || 'Game tambahan dari admin.')}</p></div>
+      <button class="card-btn">MAIN</button>
+    </div>`).join('');
+  document.getElementById('statGames').textContent = gamesCount;
+  setupCards();
+}
+
 // Ripple + pointer glow
 function setupCards(){
   document.querySelectorAll('.game-card').forEach(card=>{
+    if(card.dataset.ready === '1') return;
+    card.dataset.ready = '1';
     card.addEventListener('pointermove', e=>{
       const rect=card.getBoundingClientRect();
       card.style.setProperty('--mx', ((e.clientX-rect.left)/rect.width*100)+'%');
@@ -792,8 +843,10 @@ window.addEventListener('keydown',e=>{
   }
 });
 
+window.renderProfile = renderProfile;
+window.renderGames = renderGames;
+renderGames();
 renderProfile();
-setupCards();
 </script>
 
 
@@ -911,33 +964,35 @@ function fillAdminForm() {
   document.getElementById("adminFooterText").value = settings.footerText || footer;
 
   const adminEmail = document.getElementById("adminActiveEmail");
-  if (adminEmail) adminEmail.textContent = auth.currentUser?.email || "-";
+  if (adminEmail) adminEmail.textContent = "Terverifikasi";
+  renderAdminGamesList();
 }
 
 function syncProfileFromUser(user) {
   if (!user) return;
 
   try {
-    const currentProfile = JSON.parse(localStorage.getItem("gameArchiveProfile_v3") || "{}");
-    const isGuest = !currentProfile.name || currentProfile.name === "Guest";
+    window.currentAuthUser = user;
+    const key = "gameArchiveProfile_v3_uid_" + user.uid;
+    const currentProfile = JSON.parse(localStorage.getItem(key) || "{}");
+    const isNewProfile = !currentProfile.name;
 
-    if (isGuest) {
+    if (isNewProfile) {
       const name = user.displayName || (user.email ? user.email.split("@")[0] : "User");
       const newProfile = {
         name,
         user: user.email ? "@" + user.email.split("@")[0] : "@user",
         bio: "Login dengan Firebase.",
         status: "ONLINE",
-        favorite: currentProfile.favorite || "-",
-        avatar: currentProfile.avatar || ""
+        badge: isAdminUser(user) ? "ADMIN" : "PLAYER",
+        theme: "default",
+        favorite: "-",
+        avatar: ""
       };
-
-      localStorage.setItem("gameArchiveProfile_v3", JSON.stringify(newProfile));
-
-      if (typeof window.renderProfile === "function") {
-        window.renderProfile();
-      }
+      localStorage.setItem(key, JSON.stringify(newProfile));
     }
+
+    if (typeof window.renderProfile === "function") window.renderProfile();
   } catch (err) {
     console.warn(err);
   }
@@ -955,9 +1010,14 @@ function updateAuthUI(user) {
     adminBtn.style.display = isAdminUser(user) ? "" : "none";
   }
 
-  authMessage(user ? `Login sebagai ${user.email || "User"}` : "Belum login");
+  authMessage(user ? 'Login berhasil' : 'Belum login');
 
-  if (user) syncProfileFromUser(user);
+  if (user) {
+    syncProfileFromUser(user);
+  } else {
+    window.currentAuthUser = null;
+    if (typeof window.renderProfile === 'function') window.renderProfile();
+  }
 }
 
 window.openAuthModal = () => {
@@ -1032,7 +1092,7 @@ window.logoutHomeUser = async () => {
 
 window.openAdminModal = () => {
   if (!isAdminUser()) {
-    alert("Khusus admin. Login pakai akun hahahacees@gmail.com dulu.");
+    alert("Khusus admin. Login pakai akun admin dulu.");
     window.openAuthModal();
     return;
   }
@@ -1061,6 +1121,7 @@ window.saveAdminSettings = () => {
 
   localStorage.setItem(ADMIN_HOME_KEY, JSON.stringify(settings));
   applyAdminHomeSettings();
+  if (typeof window.renderGames === 'function') window.renderGames();
   setModalVisible("adminModal", false);
   showHomeToast("Setting admin tersimpan");
 };
@@ -1074,6 +1135,43 @@ window.resetAdminSettings = () => {
   localStorage.removeItem(ADMIN_HOME_KEY);
   location.reload();
 };
+
+
+window.clearAdminGameForm = () => {
+  ["adminGameTitle","adminGamePath","adminGameIcon","adminGameDesc"].forEach(id => { const el = document.getElementById(id); if(el) el.value = ""; });
+};
+
+window.addAdminGame = () => {
+  if (!isAdminUser()) return alert("Khusus admin.");
+  const title = document.getElementById("adminGameTitle").value.trim();
+  const path = document.getElementById("adminGamePath").value.trim();
+  const icon = document.getElementById("adminGameIcon").value.trim() || "🎮";
+  const desc = document.getElementById("adminGameDesc").value.trim() || "Game tambahan dari admin.";
+  if (!title || !path) return showHomeToast("Nama game dan path wajib diisi");
+  const list = JSON.parse(localStorage.getItem("gameArchiveCustomGames_v1") || "[]");
+  list.push({ title, path, icon, desc, color: "space", createdAt: Date.now() });
+  localStorage.setItem("gameArchiveCustomGames_v1", JSON.stringify(list));
+  window.clearAdminGameForm();
+  renderAdminGamesList();
+  if (typeof window.renderGames === "function") window.renderGames();
+  showHomeToast("Tombol game baru ditambahkan");
+};
+
+window.removeAdminGame = index => {
+  if (!isAdminUser()) return alert("Khusus admin.");
+  const list = JSON.parse(localStorage.getItem("gameArchiveCustomGames_v1") || "[]");
+  list.splice(index, 1);
+  localStorage.setItem("gameArchiveCustomGames_v1", JSON.stringify(list));
+  renderAdminGamesList();
+  if (typeof window.renderGames === "function") window.renderGames();
+};
+
+function renderAdminGamesList() {
+  const box = document.getElementById("adminGamesList");
+  if (!box) return;
+  const list = JSON.parse(localStorage.getItem("gameArchiveCustomGames_v1") || "[]");
+  box.innerHTML = list.length ? list.map((g,i)=>`<div class="admin-game-row"><span>${escapeAdminText(g.icon||"🎮")} <strong>${escapeAdminText(g.title)}</strong><br>${escapeAdminText(g.path)}</span><button type="button" onclick="removeAdminGame(${i})">Hapus</button></div>`).join("") : `<div class="admin-game-row"><span>Belum ada game tambahan.</span></div>`;
+}
 
 document.getElementById("authModal")?.addEventListener("click", event => {
   if (event.target.id === "authModal") window.closeAuthModal();
