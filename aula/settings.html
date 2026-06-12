@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#05050a">
+  <title>GameDex Admin Panel</title>
+  <link rel="stylesheet" href="../assets/css/base.css">
+  <link rel="stylesheet" href="../assets/css/settings.css">
+  <script src="../config/app.config.js"></script>
+  <script src="../config/firebase.config.js"></script>
+  <script src="../config/rest.config.js"></script>
+  <script src="../assets/js/core.js"></script>
+  <script src="../assets/js/firebase-adapter.js"></script>
+</head>
+<body data-page="Admin Panel">
+  <div class="app-bg" aria-hidden="true"></div>
+  <div class="stars-twinkle" aria-hidden="true"></div>
+  <div class="fx-glow" aria-hidden="true"></div>
+  <main class="settings-shell">
+    <section class="container settings-container">
+      <header class="settings-top">
+        <a class="btn btn-ghost btn-icon" href="home.html" aria-label="Kembali">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        </a>
+        <div class="settings-title">
+          <h1>Admin Panel</h1>
+          <p>Mobile control center</p>
+        </div>
+        <button class="btn btn-ghost btn-icon" type="button" onclick="adminLogout()" aria-label="Logout admin">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+        </button>
+      </header>
+
+      <div id="lockedView" class="locked-card hidden">
+        <img data-app-logo src="../assets/images/app-logo.png" alt="GameDex logo">
+        <h2>Admin Only</h2>
+        <p>Masuk lewat halaman login biasa. Role admin otomatis aktif kalau email Firebase kamu ada di daftar admin.</p>
+        <a class="btn btn-purple" href="login.html">LOGIN</a>
+      </div>
+
+      <div id="adminView" class="settings-grid hidden">
+        <section class="admin-hero full">
+          <div class="admin-hero-logo"><img data-app-logo src="../assets/images/app-logo.png" alt="Logo"></div>
+          <div class="admin-hero-text">
+            <span class="chip chip-green">Admin Access</span>
+            <h2 id="adminNameLabel">GameDex Control</h2>
+            <p id="adminEmailLabel">Firebase email verified</p>
+          </div>
+        </section>
+
+        <section class="settings-card full">
+          <div class="card-head">
+            <div><h2>Web Identity</h2><p>Ini yang tampil ke semua user di Home.</p></div>
+            <span class="chip chip-green">Live Edit</span>
+          </div>
+          <div class="form-grid two">
+            <div class="field"><label class="label">Nama Web</label><input class="input" id="appName" placeholder="GameDex"></div>
+            <div class="field"><label class="label">Subtitle</label><input class="input" id="appSubtitle" placeholder="Mobile Launcher"></div>
+            <div class="field full-field"><label class="label">Deskripsi Web</label><textarea class="input" id="appDescription" rows="3" placeholder="Deskripsi web"></textarea></div>
+            <div class="field"><label class="label">Welcome Title</label><input class="input" id="welcomeTitleInput" placeholder="Selamat datang"></div>
+            <div class="field"><label class="label">Welcome Text</label><input class="input" id="welcomeTextInput" placeholder="Ucapan untuk user"></div>
+            <div class="field full-field"><label class="label">Pengumuman Global</label><textarea class="input" id="announcementInput" rows="3" placeholder="Pesan untuk semua user"></textarea></div>
+          </div>
+          <div class="switch-row">
+            <div><b>Tampilkan pengumuman</b><span>Pesan ini bisa dilihat user biasa.</span></div>
+            <label class="switch"><input type="checkbox" id="showAnnouncement"><span></span></label>
+          </div>
+        </section>
+
+        <section class="settings-card danger-zone">
+          <h2>Maintenance Mode</h2>
+          <p>Kalau aktif, user biasa hanya lihat halaman maintenance. Admin tetap bisa masuk.</p>
+          <div class="switch-row compact">
+            <div><b>Stop tampilan Web</b><span>Mode maintenance aktif</span></div>
+            <label class="switch"><input type="checkbox" id="maintenanceEnabled"><span></span></label>
+          </div>
+          <div class="field"><label class="label">Judul Maintenance</label><input class="input" id="maintenanceTitle"></div>
+          <div class="field"><label class="label">Pesan Maintenance</label><textarea class="input" id="maintenanceMessage" rows="4"></textarea></div>
+        </section>
+
+        <section class="settings-card">
+          <h2>Firebase & Logo</h2>
+          <p>Admin dibuka dari email yang cocok. Untuk ganti config Firebase, edit file <b>config/firebase.config.js</b>.</p>
+          <div class="field"><label class="label">Admin Emails</label><textarea class="input" id="adminEmails" rows="3" placeholder="email1@gmail.com, email2@gmail.com"></textarea></div>
+          <div class="field"><label class="label">Logo Path</label><input class="input" id="logoPath" placeholder="assets/images/app-logo.png"></div>
+          <p class="hint">Logo disarankan PNG transparan. Ganti file di <b>assets/images/app-logo.png</b>.</p>
+        </section>
+
+        <section class="settings-card full">
+          <div class="card-head">
+            <div><h2>Game Buttons</h2><p>Edit tombol game, status, URL target, dan syarat login.</p></div>
+            <span class="chip" id="adminGameCount">0 GAME</span>
+          </div>
+          <div class="game-form">
+            <div class="field"><label class="label">ID</label><input class="input" id="gameId" placeholder="contoh: tictactoe"></div>
+            <div class="field"><label class="label">Nama Game</label><input class="input" id="gameTitle" placeholder="Tic Tac Toe"></div>
+            <div class="field"><label class="label">Icon File / URL</label><input class="input" id="gameIcon" placeholder="tictactoe atau https://..."></div>
+            <div class="field"><label class="label">Status</label><select class="input" id="gameStatus"><option value="REBUILD">REBUILD</option><option value="UPDATE">UPDATE</option><option value="READY">READY</option></select></div>
+            <div class="field full-field"><label class="label">Target URL</label><input class="input" id="gameUrl" placeholder="game/tictactoe/index.html"></div>
+            <div class="field full-field"><label class="label">Deskripsi</label><input class="input" id="gameDescription" placeholder="Deskripsi pendek game"></div>
+            <div class="switch-row full-field compact"><div><b>Wajib Login</b><span>Cocok untuk Who's The Spy biar nama ikut akun.</span></div><label class="switch"><input type="checkbox" id="gameRequiresLogin"><span></span></label></div>
+            <div class="settings-actions full-field game-edit-actions">
+              <button class="btn btn-dark" type="button" onclick="cancelGameEdit()">BATAL EDIT</button>
+              <button class="btn btn-purple" id="gameSaveBtn" type="button" onclick="addGameButton()">TAMBAH TOMBOL GAME</button>
+            </div>
+          </div>
+          <div class="admin-games-list" id="adminGamesList"></div>
+        </section>
+
+        <section class="settings-card full">
+          <h2>Save & Export</h2>
+          <p>Perubahan disimpan lokal dan akan dikirim ke Firestore kalau config Firestore aktif. Kalau Firestore gagal, data lokal tetap tersimpan.</p>
+          <textarea class="code-box" id="exportBox" spellcheck="false"></textarea>
+          <div class="settings-actions">
+            <button class="btn btn-dark" type="button" onclick="copyExport()">COPY JSON</button>
+            <button class="btn btn-purple" type="button" onclick="saveAllSettings()">SAVE SETTINGS</button>
+            <button class="btn btn-danger" type="button" onclick="resetAllSettings()">RESET LOCAL</button>
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+  <div class="toast" id="toast"></div>
+  <script src="../assets/js/boot.js"></script>
+  <script src="../assets/js/settings.js"></script>
+</body>
+</html>
