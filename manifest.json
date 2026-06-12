@@ -1,0 +1,11 @@
+{
+  "name": "GameDex",
+  "short_name": "GameDex",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#05050a",
+  "theme_color": "#05050a",
+  "icons": [
+    { "src": "assets/images/app-logo.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
