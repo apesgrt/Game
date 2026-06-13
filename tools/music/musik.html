@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Music Hub</title>
+<link rel="stylesheet" href="musik.css">
+<script>
+(function(){
+  document.addEventListener('gesturestart',function(e){e.preventDefault()},{passive:false});
+  document.addEventListener('gesturechange',function(e){e.preventDefault()},{passive:false});
+  document.addEventListener('wheel',function(e){if(e.ctrlKey)e.preventDefault()},{passive:false});
+  let lastTouchEnd=0;
+  document.addEventListener('touchend',function(e){const now=Date.now();if(now-lastTouchEnd<=330)e.preventDefault();lastTouchEnd=now},{passive:false});
+})();
+</script>
+</head>
+<body class="theme-whoop" data-storage="local-indexeddb">
+<div class="music-bg" aria-hidden="true"></div>
+
+<svg class="icon-sprite" aria-hidden="true" focusable="false">
+  <symbol id="i-music" viewBox="0 0 24 24"><path d="M9 18V6l10-2v12"/><circle cx="6" cy="18" r="3"/><circle cx="16" cy="16" r="3"/></symbol>
+  <symbol id="i-tiktok" viewBox="0 0 24 24"><path d="M14 4v10.2a4.2 4.2 0 1 1-4.2-4.2"/><path d="M14 4c1.1 3.1 3.1 5 6 5"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><path d="M8 5h3v14H8zM13 5h3v14h-3z" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-prev" viewBox="0 0 24 24"><path d="M6 5v14"/><path d="m19 6-10 6 10 6z"/></symbol>
+  <symbol id="i-next" viewBox="0 0 24 24"><path d="M18 5v14"/><path d="m5 6 10 6-10 6z"/></symbol>
+  <symbol id="i-shuffle" viewBox="0 0 24 24"><path d="M4 7h3c2.5 0 4 10 6.5 10H20"/><path d="M17 14l3 3-3 3"/><path d="M4 17h3c1.1 0 2-1 2.9-2.4"/><path d="M14 7h6"/><path d="M17 4l3 3-3 3"/></symbol>
+  <symbol id="i-repeat" viewBox="0 0 24 24"><path d="M17 2l4 4-4 4"/><path d="M3 11V9a3 3 0 0 1 3-3h15"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a3 3 0 0 1-3 3H3"/></symbol>
+  <symbol id="i-repeat-one" viewBox="0 0 24 24"><path d="M17 2l4 4-4 4"/><path d="M3 11V9a3 3 0 0 1 3-3h15"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a3 3 0 0 1-3 3H3"/><path d="M12 9v6"/><path d="m10.5 10.5 1.5-1.5 1.5 1.5"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></symbol>
+  <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 21V9"/><path d="m7 14 5-5 5 5"/><path d="M5 3h14"/></symbol>
+  <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 7.5A2.5 2.5 0 0 1 5.5 5H10l2 2h6.5A2.5 2.5 0 0 1 21 9.5v7A2.5 2.5 0 0 1 18.5 19h-13A2.5 2.5 0 0 1 3 16.5z"/></symbol>
+  <symbol id="i-folder-plus" viewBox="0 0 24 24"><path d="M3 7.5A2.5 2.5 0 0 1 5.5 5H10l2 2h6.5A2.5 2.5 0 0 1 21 9.5v7A2.5 2.5 0 0 1 18.5 19h-13A2.5 2.5 0 0 1 3 16.5z"/><path d="M12 11v5"/><path d="M9.5 13.5h5"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M6 7l1 14h10l1-14"/><path d="M9 7V4h6v3"/></symbol>
+  <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 5h5v5"/><path d="M10 14 19 5"/><path d="M19 14v5H5V5h5"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12"/><path d="M18 6 6 18"/></symbol>
+  <symbol id="i-loader" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 9 9"/></symbol>
+  <symbol id="i-broom" viewBox="0 0 24 24"><path d="M14 4l6 6"/><path d="M11 7l6 6"/><path d="M17 13l-5 5H5l6-11z"/><path d="M5 18v3"/><path d="M9 18v3"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+</svg>
+
+
+<!-- ═══════ HEADER ═══════ -->
+<header class="app-header music-header">
+  <button class="back-btn gamedex-back-btn" id="backBtn" type="button" aria-label="Kembali ke Home">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M15 18 9 12l6-6" />
+    </svg>
+    <span>Kembali</span>
+  </button>
+
+  <div class="header-center music-brand-mini">
+    <img class="music-brand-logo" src="../../assets/images/app-logo.png" alt="GameDex">
+    <div class="music-brand-text">
+      <strong>Music Hub</strong>
+      <small>Local Music · IndexedDB</small>
+    </div>
+  </div>
+
+  <button class="menu-btn gamedex-menu-btn" id="btnMenu" type="button" aria-label="Menu" aria-expanded="false">
+    <span class="menu-line"></span>
+    <span class="menu-line"></span>
+    <span class="menu-line"></span>
+  </button>
+</header>
+
+<!-- ═══════ PAGES ═══════ -->
+<main class="app-main">
+
+  <!-- Library (Whoop + TikTok) -->
+  <section class="page active" id="libraryPage">
+
+    <div class="lib-hero">
+      <div class="lib-hero-text">
+        <div class="eyebrow" id="modeEyebrow">LOCAL LIBRARY</div>
+        <h1 id="appTitle"><span class="title-icon"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-music"></use></svg></span><span>Whoop Music</span></h1>
+        <p id="appSubtitle">Upload lagu lokal, buat playlist, musik tetap hidup.</p>
+      </div>
+      <label class="upload-btn" id="uploadLabel">
+        <svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-upload"></use></svg><span>Upload</span>
+        <input type="file" id="musicInput" accept="audio/*" multiple hidden>
+      </label>
+    </div>
+
+    <div class="playlist-bar">
+      <div class="playlist-tabs" id="playlistTabs"></div>
+      <button class="pl-new-btn" id="btnNewPlaylist" type="button">+ Baru</button>
+    </div>
+
+    <div class="search-wrap">
+      <span class="search-icon"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-search"></use></svg></span>
+      <input type="text" id="searchInput" placeholder="Cari lagu..." autocomplete="off">
+    </div>
+
+    <div id="musicList" class="music-list"></div>
+
+  </section>
+
+  <!-- Downloader -->
+  <section class="page" id="downloaderPage">
+
+    <div class="dl-card" id="tiktokDownloader">
+      <div class="dl-head">
+        <div>
+          <div class="eyebrow" style="color:#fb7185">SIPUTZX API</div>
+          <h2>TikTok Downloader</h2>
+        </div>
+        <button class="icon-btn dl-text-close" id="btnCloseDownloader" type="button" aria-label="Tutup downloader">Tutup</button>
+      </div>
+      <p class="dl-desc">Paste link TikTok untuk download MP3 atau MP4 langsung ke HP.</p>
+      <div class="dl-form">
+        <input type="url" id="tiktokUrl" placeholder="https://vt.tiktok.com/..." autocomplete="off">
+        <div class="dl-format-btns">
+          <button id="btnDownloadMp3" class="dl-fmt audio" type="button">MP3</button>
+          <button id="btnDownloadMp4" class="dl-fmt video" type="button">MP4</button>
+        </div>
+        <button id="btnDownloadTikTok" class="dl-save-btn" type="button">Simpan MP3 ke TikTok Music</button>
+      </div>
+      <div class="dl-status" id="downloadStatus">Siap. Tempel link lalu pilih format.</div>
+      <div class="dl-result hidden" id="downloadResult">
+        <div class="dl-result-art" id="resultCover"><span class="dl-result-placeholder">No Cover</span></div>
+        <div class="dl-result-info">
+          <b id="resultTitle">TikTok Sound</b>
+          <span id="resultMeta">—</span>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+</main>
+
+<!-- ═══════ MINI PLAYER ═══════ -->
+<div class="mini-player" id="miniPlayer">
+  <div class="mp-seek-wrap">
+    <input type="range" id="progressBar" value="0" min="0" max="100" step="0.1">
+  </div>
+  <div class="mp-row1">
+    <div class="mp-art" id="playerArt"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-music"></use></svg></div>
+    <div class="mp-center">
+      <div class="mp-title-row">
+        <span class="mp-title" id="nowPlaying">Tidak ada musik</span>
+        <div class="mp-main-ctrls">
+          <button class="mp-btn" id="btnPrev" type="button" aria-label="Sebelumnya"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-prev"></use></svg></button>
+          <button class="mp-play-btn" id="playPauseBtn" type="button" aria-label="Play/Pause"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg></button>
+          <button class="mp-btn" id="btnNext" type="button" aria-label="Berikutnya"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-next"></use></svg></button>
+        </div>
+      </div>
+      <div class="mp-meta-row">
+        <span class="mp-sub" id="playerPlaylist">—</span>
+        <div class="mp-meta-right">
+          <button class="mp-mode-btn" id="btnShuffle" type="button" title="Shuffle" aria-label="Shuffle"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-shuffle"></use></svg></button>
+          <span class="mp-time" id="timeNow">0:00</span>
+          <span class="mp-time-sep">·</span>
+          <span class="mp-time" id="timeTotal">0:00</span>
+          <button class="mp-mode-btn" id="btnRepeat" type="button" title="Repeat" aria-label="Repeat"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-repeat"></use></svg></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ TAB BAR ═══════ -->
+<nav class="tab-bar">
+  <button id="pageWhoopBtn" class="tab active" type="button">
+    <span class="tab-icon"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-music"></use></svg></span>
+    <span class="tab-label">Whoop</span>
+  </button>
+  <button id="pageTiktokBtn" class="tab" type="button">
+    <span class="tab-icon"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-tiktok"></use></svg></span>
+    <span class="tab-label">TikTok</span>
+  </button>
+  <button id="pageDownloaderBtn" class="tab" type="button">
+    <span class="tab-icon"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-download"></use></svg></span>
+    <span class="tab-label">Download</span>
+  </button>
+</nav>
+
+<!-- ═══════ SIDE MENU ═══════ -->
+<div class="menu-overlay hidden" id="menuOverlay">
+  <aside class="side-menu">
+    <div class="side-head">
+      <div>
+        <div class="eyebrow">MENU AKSI</div>
+        <h3>Pilihan</h3>
+      </div>
+      <button class="icon-btn" id="btnCloseMenu" type="button" aria-label="Tutup menu"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-x"></use></svg></button>
+    </div>
+    <button class="menu-item" data-action="upload" type="button">
+      <span class="menu-ico"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-folder"></use></svg></span>
+      <div class="menu-text">
+        <b>Upload Lagu</b>
+        <small>Ambil audio dari penyimpanan HP</small>
+      </div>
+    </button>
+    <button class="menu-item danger" data-action="clearTiktok" type="button">
+      <span class="menu-ico"><svg class="ui-icon" aria-hidden="true" focusable="false"><use href="#i-broom"></use></svg></span>
+      <div class="menu-text">
+        <b>Bersihkan TikTok Sound</b>
+        <small>Hapus semua sound TikTok tersimpan</small>
+      </div>
+    </button>
+  </aside>
+</div>
+
+<!-- ═══════ MODAL: Playlist baru ═══════ -->
+<div class="modal-overlay hidden" id="modalPlaylist">
+  <div class="modal-box">
+    <h3>Playlist Baru</h3>
+    <input type="text" id="newPlaylistName" placeholder="Nama playlist..." maxlength="30">
+    <div class="modal-btns">
+      <button class="mbtn cancel" id="btnCancelPlaylist" type="button">Batal</button>
+      <button class="mbtn ok" id="btnCreatePlaylist" type="button">Buat</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ MODAL: Add to playlist ═══════ -->
+<div class="modal-overlay hidden" id="modalAddPl">
+  <div class="modal-box">
+    <h3>Tambah ke Playlist</h3>
+    <div id="addPlList" class="add-pl-list"></div>
+    <div class="modal-btns">
+      <button class="mbtn cancel" id="btnCloseAddPl" type="button">Tutup</button>
+    </div>
+  </div>
+</div>
+
+<audio id="gamedexAudio" preload="metadata" playsinline></audio>
+<script src="musik.js"></script>
+</body>
+</html>

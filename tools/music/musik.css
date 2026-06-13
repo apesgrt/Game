@@ -1,0 +1,1350 @@
+/* ═══════════════════════════════════════════
+   MUSIC HUB — Clean Stylesheet v3
+   Struktur: Variables → Reset → Base → Header
+   → Pages → Hero → Playlist → Search → Cards
+   → Downloader → Mini Player → Tab Bar →
+   Side Menu → Modals → Animations → Responsive
+═══════════════════════════════════════════ */
+
+/* ── 1. Variables ── */
+:root {
+  --bg:          #080c14;
+  --surface:     #0f1420;
+  --surface-2:   #151c2c;
+  --border:      rgba(255,255,255,.08);
+  --border-hi:   rgba(255,255,255,.13);
+  --text:        #eef2ff;
+  --muted:       rgba(238,242,255,.46);
+  --accent:      #5865f2;
+  --accent-dim:  rgba(88,101,242,.22);
+  --accent-2:    #9d54ff;
+  --cyan:        #00f2ea;
+  --red:         #ff0050;
+  --danger:      #ff4f7b;
+  --r-lg:        20px;
+  --r:           14px;
+  --r-sm:        10px;
+  --ease:        .18s ease;
+
+  /* Layout heights (no safe-area yet, added per-rule) */
+  --tab-h:  62px;
+  --mp-h:   94px;
+}
+
+/* ── 2. Reset ── */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { background: var(--bg); }
+::-webkit-scrollbar { width:0; height:0; }
+
+/* ── 3. Base ── */
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  color: var(--text);
+  min-height: 100vh;
+  background: linear-gradient(170deg, #080c14 0%, #0c1124 100%);
+  padding:
+    max(10px, env(safe-area-inset-top))
+    10px
+    calc(var(--mp-h) + var(--tab-h) + 12px + env(safe-area-inset-bottom));
+  overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+body.theme-downloader {
+  padding-bottom: calc(var(--tab-h) + 20px + env(safe-area-inset-bottom));
+}
+
+button, input { font: inherit; border: none; outline: none; }
+button { cursor: pointer; background: none; color: inherit; }
+
+/* ════════════════════════════════════════
+   HEADER
+════════════════════════════════════════ */
+.app-header {
+  height: 46px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.back-btn {
+  height: 36px;
+  padding: 0 13px;
+  border-radius: var(--r);
+  background: var(--surface-2);
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+  transition: var(--ease);
+}
+.back-btn:active { opacity: .7; }
+
+.header-center {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 800;
+  color: rgba(255,255,255,.7);
+  letter-spacing: .04em;
+}
+.header-icon { font-size: 16px; }
+
+.menu-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r);
+  background: var(--accent-dim);
+  border: 1px solid rgba(88,101,242,.28);
+  color: var(--text);
+  font-size: 17px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  transition: var(--ease);
+}
+.menu-btn:active { transform: scale(.92); }
+
+/* ════════════════════════════════════════
+   PAGES
+════════════════════════════════════════ */
+.app-main { max-width: 720px; margin: 0 auto; }
+
+.page { display: none; }
+
+#libraryPage.active {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  animation: fadeIn .22s ease both;
+}
+#downloaderPage.active {
+  display: block;
+  animation: fadeIn .22s ease both;
+}
+
+/* ════════════════════════════════════════
+   LIBRARY HERO
+════════════════════════════════════════ */
+.lib-hero {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+body.theme-tiktok .lib-hero {
+  background: linear-gradient(135deg, rgba(0,242,234,.06), rgba(255,0,80,.05));
+  border-color: rgba(0,242,234,.15);
+}
+
+.eyebrow {
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: .18em;
+  color: #7dd3fc;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+}
+
+#appTitle {
+  font-size: clamp(20px, 5.2vw, 30px);
+  font-weight: 950;
+  letter-spacing: -.04em;
+  line-height: 1.06;
+}
+
+#appSubtitle {
+  margin-top: 5px;
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.upload-btn {
+  flex-shrink: 0;
+  height: 40px;
+  padding: 0 16px;
+  border-radius: var(--r);
+  background: var(--accent);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: var(--ease);
+}
+.upload-btn:active { opacity: .8; transform: scale(.97); }
+.upload-btn.hidden { display: none; }
+
+/* ════════════════════════════════════════
+   PLAYLIST BAR
+════════════════════════════════════════ */
+.playlist-bar {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow-x: auto;
+}
+
+.playlist-tabs { display: flex; gap: 5px; }
+
+.pl-tab {
+  height: 32px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 800;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: var(--ease);
+}
+.pl-tab.active {
+  background: var(--accent);
+  border-color: transparent;
+  color: #fff;
+}
+body.theme-tiktok .pl-tab.active {
+  background: linear-gradient(135deg, var(--cyan), var(--red));
+}
+
+.pl-tab-del {
+  width: 15px; height: 15px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.18);
+  border: none;
+  color: #fff;
+  font-size: 10px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.pl-new-btn {
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: transparent;
+  border: 1px dashed var(--border-hi);
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 800;
+  flex-shrink: 0;
+  white-space: nowrap;
+  transition: var(--ease);
+}
+.pl-new-btn:active { transform: scale(.96); }
+
+/* ════════════════════════════════════════
+   SEARCH
+════════════════════════════════════════ */
+.search-wrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  height: 44px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 13px;
+}
+.search-icon { font-size: 13px; opacity: .45; }
+.search-wrap input {
+  flex: 1;
+  height: 100%;
+  background: transparent;
+  color: var(--text);
+  font-size: 14px;
+}
+.search-wrap input::placeholder { color: var(--muted); }
+
+/* ════════════════════════════════════════
+   MUSIC CARDS
+════════════════════════════════════════ */
+.music-list { display: flex; flex-direction: column; gap: 7px; }
+
+/* edge-card is used by JS for empty-state */
+.edge-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+}
+
+.music-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  animation: fadeIn .22s ease both;
+  overflow: hidden;
+  min-height: 68px;
+  transition: background var(--ease), border-color var(--ease);
+}
+.music-card:active { background: var(--surface-2); transform: scale(.99); }
+.music-card.playing {
+  background: rgba(88,101,242,.1);
+  border-color: rgba(88,101,242,.3);
+}
+
+body.theme-tiktok .music-card {
+  background: linear-gradient(135deg, rgba(0,242,234,.05), rgba(255,0,80,.04));
+}
+body.theme-tiktok .music-card.playing {
+  background: linear-gradient(135deg, rgba(0,242,234,.12), rgba(255,0,80,.08));
+  border-color: rgba(0,242,234,.3);
+}
+
+/* Album art */
+.card-art, .card-art-default {
+  width: 50px; height: 50px;
+  border-radius: 14px;
+  flex-shrink: 0;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+}
+.card-art img { width:100%; height:100%; object-fit:cover; display:block; }
+.card-art-default {
+  background: linear-gradient(135deg, #1e2540, var(--accent), var(--accent-2));
+  font-size: 22px;
+}
+body.theme-tiktok .card-art-default {
+  background: linear-gradient(135deg, var(--cyan), #0a0a0a, var(--red));
+}
+
+/* Card text */
+.card-info { min-width: 0; flex: 1; }
+.card-title {
+  font-size: 13px;
+  font-weight: 800;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: -.01em;
+}
+.card-sub {
+  margin-top: 3px;
+  font-size: 11px;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.card-source {
+  display: inline-block;
+  margin-top: 4px;
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: .1em;
+  color: var(--cyan);
+}
+
+/* Playing dot */
+.card-playing-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 8px rgba(88,101,242,.5);
+  animation: pulseDot 1.3s ease-in-out infinite;
+  flex-shrink: 0;
+}
+body.theme-tiktok .card-playing-dot {
+  background: var(--cyan);
+  box-shadow: 0 0 8px rgba(0,242,234,.5);
+}
+
+/* Card action buttons */
+.card-actions { display: flex; align-items: center; gap: 5px; }
+.card-btn {
+  width: 36px; height: 36px;
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  display: grid;
+  place-items: center;
+  font-size: 14px;
+  flex-shrink: 0;
+  transition: var(--ease);
+}
+.card-btn:active { transform: scale(.89); }
+.card-btn-play {
+  background: var(--accent);
+  border-color: transparent;
+}
+body.theme-tiktok .card-btn-play {
+  background: linear-gradient(135deg, var(--cyan), var(--red));
+  border-color: transparent;
+}
+.card-btn-del { color: #ff8aa4; }
+
+/* Empty state */
+.empty-state {
+  text-align: center;
+  padding: 36px 20px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.7;
+}
+.empty-state .icon {
+  font-size: 40px;
+  margin-bottom: 8px;
+  display: block;
+}
+
+/* ════════════════════════════════════════
+   DOWNLOADER PAGE
+════════════════════════════════════════ */
+.dl-card {
+  background: var(--surface);
+  border: 1px solid rgba(124,58,237,.22);
+  border-radius: var(--r-lg);
+  padding: 16px;
+}
+
+.dl-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 6px;
+}
+.dl-head h2 {
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: -.025em;
+}
+
+.icon-btn {
+  width: 34px; height: 34px;
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 16px;
+  display: grid;
+  place-items: center;
+  transition: var(--ease);
+}
+.icon-btn:active { transform: scale(.92); }
+
+.dl-desc {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.5;
+  margin-bottom: 14px;
+}
+
+.dl-form { display: flex; flex-direction: column; gap: 8px; }
+
+.dl-form input[type="url"] {
+  width: 100%;
+  height: 44px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 0 13px;
+  color: var(--text);
+  font-size: 13px;
+}
+.dl-form input::placeholder { color: var(--muted); }
+.dl-form input:focus { border-color: var(--border-hi); }
+
+.dl-format-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+
+.dl-fmt {
+  height: 42px;
+  border-radius: var(--r);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 800;
+  transition: var(--ease);
+}
+.dl-fmt.audio { background: #0f766e; }
+.dl-fmt.video { background: #7c3aed; }
+.dl-fmt:active { opacity: .82; transform: scale(.97); }
+.dl-fmt:disabled { opacity: .5; }
+
+.dl-save-btn {
+  height: 44px;
+  border-radius: var(--r);
+  background: var(--accent);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 800;
+  transition: var(--ease);
+}
+.dl-save-btn:active { opacity: .82; transform: scale(.97); }
+.dl-save-btn:disabled { opacity: .5; }
+
+.dl-status {
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.4;
+  min-height: 18px;
+}
+.dl-status.ok { color: #68f7d8; }
+.dl-status.err { color: #ff7896; }
+
+.dl-result {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 10px;
+}
+.dl-result.hidden { display: none; }
+
+.dl-result-art {
+  width: 48px; height: 48px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--cyan), #0a0a0a, var(--red));
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+  font-weight: 900;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.dl-result-art img { width:100%; height:100%; object-fit:cover; display:block; }
+
+.dl-result-info { min-width: 0; }
+.dl-result-info b {
+  display: block;
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.dl-result-info span {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 3px;
+}
+
+/* ════════════════════════════════════════
+   MINI PLAYER
+════════════════════════════════════════ */
+.mini-player {
+  position: fixed;
+  left: 10px;
+  right: 10px;
+  bottom: calc(var(--tab-h) + env(safe-area-inset-bottom) + 6px);
+  z-index: 100;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 0 12px 10px;
+  transition: border-color .3s ease, box-shadow .3s ease;
+}
+
+.mini-player.playing {
+  border-color: rgba(88,101,242,.38);
+  box-shadow: 0 -4px 28px rgba(88,101,242,.12), 0 4px 20px rgba(0,0,0,.4);
+}
+
+body.theme-tiktok .mini-player.playing {
+  border-color: rgba(0,242,234,.32);
+  box-shadow: 0 -4px 28px rgba(0,242,234,.1);
+}
+
+body.theme-downloader .mini-player { display: none; }
+
+/* Progress / seek bar */
+.mp-seek-wrap { padding: 7px 0 3px; }
+
+#progressBar {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 3px;
+  border-radius: 999px;
+  outline: none;
+  cursor: pointer;
+  background: linear-gradient(
+    to right,
+    var(--accent) var(--pct, 0%),
+    var(--border) var(--pct, 0%)
+  );
+}
+#progressBar::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  box-shadow: 0 0 0 2px var(--surface);
+  transition: transform .15s ease;
+}
+#progressBar:active::-webkit-slider-thumb { transform: scale(1.3); }
+
+body.theme-tiktok #progressBar {
+  background: linear-gradient(
+    to right,
+    var(--cyan) var(--pct, 0%),
+    var(--border) var(--pct, 0%)
+  );
+}
+body.theme-tiktok #progressBar::-webkit-slider-thumb { background: var(--cyan); }
+
+/* Row 1: art + title/controls */
+.mp-row1 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mp-art {
+  width: 44px; height: 44px;
+  border-radius: 13px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.mp-art img { width:100%; height:100%; object-fit:cover; display:block; }
+
+body.theme-tiktok .mp-art {
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--cyan), #111, var(--red));
+}
+body.theme-tiktok .mini-player.playing .mp-art {
+  animation: spinDisc 9s linear infinite;
+}
+
+.mp-center { flex: 1; min-width: 0; }
+
+.mp-title-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 5px;
+}
+.mp-title {
+  flex: 1;
+  min-width: 0;
+  font-size: 13px;
+  font-weight: 800;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: -.015em;
+}
+
+/* Prev / Play / Next controls */
+.mp-main-ctrls { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+
+.mp-btn {
+  width: 30px; height: 30px;
+  border-radius: 9px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 13px;
+  display: grid;
+  place-items: center;
+  transition: var(--ease);
+}
+.mp-btn:active { transform: scale(.88); }
+
+.mp-play-btn {
+  width: 40px; height: 40px;
+  border-radius: 13px;
+  background: var(--accent);
+  border: none;
+  color: #fff;
+  font-size: 16px;
+  display: grid;
+  place-items: center;
+  transition: var(--ease);
+}
+.mp-play-btn:active { transform: scale(.9); opacity: .85; }
+body.theme-tiktok .mp-play-btn {
+  background: linear-gradient(135deg, var(--cyan), var(--red));
+}
+
+/* Meta row: sub + shuffle/time/repeat */
+.mp-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.mp-sub {
+  flex: 1;
+  min-width: 0;
+  font-size: 10px;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mp-meta-right { display: flex; align-items: center; gap: 3px; flex-shrink: 0; }
+
+.mp-mode-btn {
+  width: 24px; height: 24px;
+  border-radius: 7px;
+  font-size: 12px;
+  color: var(--muted);
+  display: grid;
+  place-items: center;
+  transition: var(--ease);
+}
+.mp-mode-btn.active { color: var(--accent); }
+body.theme-tiktok .mp-mode-btn.active { color: var(--cyan); }
+.mp-mode-btn:active { transform: scale(.88); }
+
+.mp-time {
+  font-size: 10px;
+  color: var(--muted);
+  width: 27px;
+  text-align: center;
+}
+.mp-time-sep { font-size: 10px; color: var(--border-hi); }
+
+/* ════════════════════════════════════════
+   TAB BAR
+════════════════════════════════════════ */
+.tab-bar {
+  position: fixed;
+  left: 0; right: 0;
+  bottom: 0;
+  height: calc(var(--tab-h) + env(safe-area-inset-bottom));
+  padding-bottom: env(safe-area-inset-bottom);
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: flex-start;
+  padding-top: 5px;
+  z-index: 99;
+}
+
+.tab {
+  flex: 1;
+  height: 57px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  color: var(--muted);
+  transition: color var(--ease);
+  border-radius: 0;
+}
+.tab:active { transform: scale(.94); }
+
+.tab-icon {
+  font-size: 20px;
+  line-height: 1;
+  transition: filter var(--ease);
+}
+.tab-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .03em;
+}
+
+.tab.active { color: var(--accent); }
+.tab.active .tab-icon { filter: drop-shadow(0 0 5px rgba(88,101,242,.5)); }
+
+body.theme-tiktok .tab.active { color: var(--cyan); }
+body.theme-tiktok .tab.active .tab-icon { filter: drop-shadow(0 0 5px rgba(0,242,234,.45)); }
+
+body.theme-downloader .tab.active { color: #a78bfa; }
+body.theme-downloader .tab.active .tab-icon { filter: drop-shadow(0 0 5px rgba(167,139,250,.5)); }
+
+/* ════════════════════════════════════════
+   SIDE MENU
+════════════════════════════════════════ */
+.menu-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 220;
+  background: rgba(0,0,0,.62);
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px;
+}
+.menu-overlay.hidden { display: none; }
+
+.side-menu {
+  width: min(290px, 92vw);
+  height: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  animation: slideMenu .2s ease both;
+}
+
+.side-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 4px;
+}
+.side-head h3 {
+  font-size: 21px;
+  font-weight: 900;
+  letter-spacing: -.03em;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 12px;
+  text-align: left;
+  transition: var(--ease);
+}
+.menu-item:active { transform: scale(.98); opacity: .82; }
+.menu-item.danger .menu-ico { filter: grayscale(.3); }
+.menu-item.danger b { color: #ff8aa4; }
+
+.menu-ico {
+  width: 38px; height: 38px;
+  border-radius: var(--r-sm);
+  background: rgba(255,255,255,.07);
+  display: grid;
+  place-items: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.menu-text { min-width: 0; }
+.menu-text b { display: block; font-size: 13px; }
+.menu-text small {
+  display: block;
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+/* ════════════════════════════════════════
+   MODALS
+════════════════════════════════════════ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 230;
+  background: rgba(0,0,0,.66);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.modal-overlay.hidden { display: none; }
+
+.modal-box {
+  width: min(340px, 95vw);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 18px;
+  animation: pop .2s ease both;
+}
+.modal-box h3 {
+  font-size: 17px;
+  font-weight: 900;
+  margin-bottom: 12px;
+}
+.modal-box input {
+  width: 100%;
+  height: 44px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 0 13px;
+  color: var(--text);
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+.modal-box input::placeholder { color: var(--muted); }
+.modal-box input:focus { border-color: var(--border-hi); }
+
+.modal-btns { display: flex; gap: 7px; justify-content: flex-end; }
+.mbtn {
+  height: 38px;
+  padding: 0 16px;
+  border-radius: var(--r-sm);
+  font-size: 13px;
+  font-weight: 800;
+  transition: var(--ease);
+}
+.mbtn:active { transform: scale(.95); }
+.mbtn.cancel {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+.mbtn.ok {
+  background: var(--accent);
+  color: #fff;
+}
+
+.add-pl-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 210px;
+  overflow-y: auto;
+  margin-bottom: 12px;
+}
+.add-pl-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  cursor: pointer;
+  font-size: 13px;
+  transition: var(--ease);
+}
+.add-pl-item:active { transform: scale(.98); }
+
+/* ════════════════════════════════════════
+   UTILITIES
+════════════════════════════════════════ */
+.hidden { display: none !important; }
+
+/* ════════════════════════════════════════
+   ANIMATIONS
+════════════════════════════════════════ */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0);   }
+}
+@keyframes pulseDot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50%       { transform: scale(.6); opacity: .35; }
+}
+@keyframes spinDisc { to { transform: rotate(360deg); } }
+@keyframes slideMenu {
+  from { transform: translateX(22px); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+@keyframes pop {
+  from { transform: scale(.93); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+
+/* ════════════════════════════════════════
+   RESPONSIVE
+════════════════════════════════════════ */
+@media (max-width: 400px) {
+  body { padding-left: 8px; padding-right: 8px; }
+  .lib-hero { flex-direction: column; align-items: stretch; gap: 10px; }
+  .upload-btn { justify-content: center; }
+  #appTitle { font-size: 19px; }
+  .card-art, .card-art-default { width: 44px; height: 44px; border-radius: 12px; }
+  .card-btn { width: 33px; height: 33px; }
+  .mp-play-btn { width: 36px; height: 36px; font-size: 14px; }
+  .mp-btn { width: 27px; height: 27px; }
+}
+
+@media (max-width: 320px) {
+  .mini-player { left: 7px; right: 7px; }
+  .mp-time { width: 24px; font-size: 9px; }
+  .tab-label { font-size: 9px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+/* ════════════════════════════════════════
+   GameDex compatibility layer
+   Back button + iframe view + dark grid background
+════════════════════════════════════════ */
+.music-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 50% -10%, rgba(104, 0, 255, 0.15), transparent 35%),
+    radial-gradient(circle at 92% 8%, rgba(90, 150, 255, 0.12), transparent 32%),
+    linear-gradient(135deg, #0b1020 0%, #111a34 48%, #0d1830 100%);
+}
+
+.music-bg::before {
+  content: "";
+  position: absolute;
+  inset: -60px;
+  opacity: 0.42;
+  background-image:
+    linear-gradient(rgba(150, 175, 255, 0.10) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(150, 175, 255, 0.10) 1px, transparent 1px);
+  background-size: 48px 48px;
+  animation: musicGridMove 46s linear infinite;
+}
+
+.music-header {
+  min-height: 58px;
+  height: auto;
+  padding: 8px;
+  border-radius: 22px;
+  background: rgba(10, 10, 16, 0.90);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow:
+    0 18px 44px rgba(0, 0, 0, 0.38),
+    0 0 24px rgba(104, 0, 255, 0.08);
+  backdrop-filter: blur(12px);
+}
+
+.gamedex-back-btn {
+  min-width: 44px;
+  height: 42px;
+  padding: 0 12px;
+  gap: 6px;
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.86);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.gamedex-back-btn svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.music-brand-mini {
+  justify-content: flex-start;
+  gap: 10px;
+  min-width: 0;
+}
+
+.music-brand-logo {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  flex: 0 0 auto;
+  filter: drop-shadow(0 10px 18px rgba(104, 0, 255, 0.24));
+}
+
+.music-brand-text {
+  min-width: 0;
+  display: grid;
+  gap: 1px;
+}
+
+.music-brand-text strong {
+  font-size: 14px;
+  line-height: 1.05;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.music-brand-text small {
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+  white-space: nowrap;
+}
+
+.gamedex-menu-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  display: grid;
+  place-items: center;
+  gap: 0;
+}
+
+.menu-line {
+  width: 18px;
+  height: 2px;
+  margin: 2px 0;
+  display: block;
+  border-radius: 999px;
+  background: #fff;
+}
+
+@keyframes musicGridMove {
+  from {
+    background-position: 0 0, 0 0;
+  }
+
+  to {
+    background-position: 96px 96px, 96px 96px;
+  }
+}
+
+@media (max-width: 380px) {
+  .gamedex-back-btn span {
+    display: none;
+  }
+
+  .gamedex-back-btn {
+    width: 42px;
+    padding: 0;
+    justify-content: center;
+  }
+}
+
+/* ================================
+   Icon system + animated hamburger v4
+================================ */
+.icon-sprite {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.ui-icon {
+  width: 1em;
+  height: 1em;
+  display: block;
+  flex: 0 0 auto;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+button .ui-icon,
+label .ui-icon,
+.pl-tab .ui-icon {
+  width: 17px;
+  height: 17px;
+}
+
+#appTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.title-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: rgba(88, 101, 242, .15);
+  color: #b8c1ff;
+}
+
+.title-icon .ui-icon {
+  width: 20px;
+  height: 20px;
+}
+
+body.theme-tiktok .title-icon {
+  background: linear-gradient(135deg, rgba(0,242,234,.16), rgba(255,0,80,.14));
+  color: var(--cyan);
+}
+
+.upload-btn,
+.dl-fmt,
+.dl-save-btn {
+  gap: 7px;
+  justify-content: center;
+}
+
+.search-icon .ui-icon {
+  width: 17px;
+  height: 17px;
+  opacity: .75;
+}
+
+.icon-btn .ui-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.card-btn .ui-icon {
+  width: 17px;
+  height: 17px;
+}
+
+.card-art-default .art-icon,
+.card-art-default .ui-icon {
+  width: 24px;
+  height: 24px;
+  color: rgba(255,255,255,.95);
+}
+
+.empty-state .empty-icon,
+.empty-state .ui-icon {
+  width: 40px;
+  height: 40px;
+  margin: 0 auto 8px;
+  color: rgba(255,255,255,.8);
+}
+
+.mp-art .ui-icon,
+.dl-result-art .ui-icon {
+  width: 22px;
+  height: 22px;
+  color: rgba(255,255,255,.96);
+}
+
+.mp-btn .ui-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.mp-play-btn .ui-icon {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+  stroke: none;
+}
+
+.mp-mode-btn .ui-icon {
+  width: 15px;
+  height: 15px;
+}
+
+.tab-icon {
+  display: grid;
+  place-items: center;
+}
+
+.tab-icon .ui-icon {
+  width: 21px;
+  height: 21px;
+}
+
+.menu-ico .ui-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.pl-tab-del .ui-icon {
+  width: 10px;
+  height: 10px;
+}
+
+.is-loader {
+  animation: spinIcon .75s linear infinite;
+}
+
+@keyframes spinIcon {
+  to { transform: rotate(360deg); }
+}
+
+.gamedex-menu-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.gamedex-menu-btn .menu-line {
+  position: absolute;
+  left: 50%;
+  width: 19px;
+  height: 2px;
+  margin: 0;
+  border-radius: 999px;
+  background: currentColor;
+  transform: translateX(-50%);
+  transition:
+    transform .24s cubic-bezier(.22,1,.36,1),
+    opacity .16s ease,
+    width .2s ease;
+}
+
+.gamedex-menu-btn .menu-line:nth-child(1) {
+  transform: translate(-50%, -6px);
+}
+
+.gamedex-menu-btn .menu-line:nth-child(2) {
+  transform: translate(-50%, 0);
+}
+
+.gamedex-menu-btn .menu-line:nth-child(3) {
+  transform: translate(-50%, 6px);
+}
+
+.gamedex-menu-btn.active .menu-line:nth-child(1) {
+  transform: translate(-50%, 0) rotate(45deg);
+}
+
+.gamedex-menu-btn.active .menu-line:nth-child(2) {
+  opacity: 0;
+  width: 0;
+}
+
+.gamedex-menu-btn.active .menu-line:nth-child(3) {
+  transform: translate(-50%, 0) rotate(-45deg);
+}
+
+/* v5: TikTok downloader dibuat text-only, tanpa icon */
+#downloaderPage .dl-fmt,
+#downloaderPage .dl-save-btn,
+#downloaderPage .dl-text-close {
+  gap: 0;
+}
+#downloaderPage .dl-text-close {
+  width: auto;
+  min-width: 62px;
+  padding: 0 14px;
+  font-size: 12px;
+  font-weight: 800;
+}
+#downloaderPage .dl-result-placeholder {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  opacity: .55;
+  text-transform: uppercase;
+}
