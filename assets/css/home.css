@@ -1,0 +1,937 @@
+body {
+  overflow: hidden;
+}
+
+.app-shell {
+  height: 100vh;
+  height: 100dvh;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  padding: 14px 0 26px;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  padding: 0 0 12px;
+}
+
+.navbar {
+  height: 70px;
+  border-radius: 22px;
+  background: rgba(10, 10, 16, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.42), 0 0 24px rgba(104, 0, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  backdrop-filter: blur(12px);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.brand-logo {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  border-radius: 0;
+  background: transparent;
+  border: 0;
+  filter: drop-shadow(0 14px 22px rgba(104, 0, 255, 0.22));
+}
+
+.brand-text {
+  min-width: 0;
+}
+
+.brand-title {
+  font-size: 20px;
+  font-weight: 950;
+  letter-spacing: -0.045em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.brand-subtitle {
+  margin-top: 1px;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-only {
+  display: none;
+}
+
+.is-admin .admin-only {
+  display: inline-flex;
+}
+
+.hamburger {
+  position: relative;
+  width: 46px;
+  height: 46px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid var(--line);
+  display: grid;
+  place-items: center;
+}
+
+.hamburger-lines {
+  position: relative;
+  width: 22px;
+  height: 16px;
+}
+
+.hamburger-lines span {
+  position: absolute;
+  left: 0;
+  width: 22px;
+  height: 2px;
+  border-radius: 999px;
+  background: #fff;
+  transition: transform 0.25s ease, top 0.25s ease, opacity 0.2s ease;
+}
+
+.hamburger-lines span:nth-child(1) {
+  top: 0;
+}
+
+.hamburger-lines span:nth-child(2) {
+  top: 7px;
+}
+
+.hamburger-lines span:nth-child(3) {
+  top: 14px;
+}
+
+.hamburger.active .hamburger-lines span:nth-child(1) {
+  top: 7px;
+  transform: rotate(45deg);
+}
+
+.hamburger.active .hamburger-lines span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.active .hamburger-lines span:nth-child(3) {
+  top: 7px;
+  transform: rotate(-45deg);
+}
+
+.menu-panel {
+  position: fixed;
+  top: 92px;
+  left: 16px;
+  right: 16px;
+  z-index: 55;
+  border-radius: 24px;
+  background: #101016;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 22px 70px rgba(0, 0, 0, 0.56);
+  padding: 10px;
+  transform: translateY(-14px) scale(0.98);
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.menu-panel.active {
+  transform: none;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.menu-link {
+  height: 52px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 12px;
+  color: rgba(255, 255, 255, 0.82);
+  font-weight: 850;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.menu-link svg {
+  width: 20px;
+  height: 20px;
+  color: #cfc4ff;
+}
+
+.menu-link:hover,
+.menu-link:active {
+  background: rgba(104, 0, 255, 0.12);
+}
+
+.main-content {
+  display: grid;
+  gap: 16px;
+  padding-bottom: 32px;
+}
+
+.account-card,
+.global-card,
+.section-card {
+  border-radius: 26px;
+  background: linear-gradient(180deg, rgba(21, 21, 32, 0.94), rgba(12, 12, 18, 0.94));
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow: 0 22px 55px rgba(0, 0, 0, 0.33);
+  overflow: hidden;
+}
+
+.account-card {
+  padding: 14px;
+  display: grid;
+  gap: 12px;
+}
+
+.account-main {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar {
+  width: 58px;
+  height: 58px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(104, 0, 255, 0.24), rgba(157, 204, 255, 0.12));
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+  text-decoration: none;
+  color: #fff;
+  flex: 0 0 auto;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.initial {
+  font-size: 23px;
+  font-weight: 950;
+}
+
+.account-info {
+  min-width: 0;
+  flex: 1;
+}
+
+.account-kicker {
+  font-size: 10px;
+  font-weight: 950;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.account-name {
+  font-size: 22px;
+  font-weight: 950;
+  letter-spacing: -0.05em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.account-user {
+  margin-top: 2px;
+  font-size: 12px;
+  color: var(--dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.account-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.account-actions .btn,
+.account-actions .btn-account {
+  width: 100%;
+  min-width: 0;
+  height: 36px;
+  border-radius: 12px;
+  padding: 0 10px;
+  font-size: 10px;
+  letter-spacing: 0.07em;
+  box-shadow: none;
+}
+
+#authBtn.is-logout {
+  background: rgba(255, 107, 138, 0.13);
+  border: 1px solid rgba(255, 107, 138, 0.35);
+  color: #ffd8e0;
+}
+
+#editProfileBtn {
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.86);
+}
+
+.global-card {
+  position: relative;
+  padding: 18px;
+}
+
+.global-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 10% 0, rgba(104, 0, 255, 0.22), transparent 42%);
+  pointer-events: none;
+}
+
+.global-inner {
+  position: relative;
+  display: grid;
+  gap: 10px;
+}
+
+.global-kicker {
+  font-size: 10px;
+  font-weight: 950;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #d8ccff;
+}
+
+.global-title {
+  font-size: 26px;
+  font-weight: 950;
+  line-height: 0.98;
+  letter-spacing: -0.055em;
+}
+
+.global-text {
+  font-size: 13px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.announcement {
+  padding: 12px 13px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  font-size: 12px;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.76);
+}
+
+.section-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  margin: 26px 4px 16px;
+  padding: 2px 2px 0;
+}
+
+.section-head > div {
+  flex: 1;
+  min-width: 0;
+}
+
+.section-head h2 {
+  margin: 0;
+  font-size: 20px;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+}
+
+.section-head p {
+  margin: 8px 0 0;
+  font-size: 12px;
+  line-height: 1.25;
+  color: var(--muted);
+}
+
+.section-head .chip,
+#gameCount,
+#toolCount {
+  flex-shrink: 0;
+  align-self: flex-start;
+  margin-top: 2px;
+  white-space: nowrap;
+}
+
+.games-list,
+.tools-list {
+  display: grid;
+  gap: 11px;
+}
+
+.tool-section {
+  margin-top: 4px;
+}
+
+.game-button,
+.tool-button {
+  width: 100%;
+  min-height: 76px;
+  border-radius: 22px;
+  padding: 12px;
+  background: linear-gradient(180deg, rgba(22, 22, 32, 0.92), rgba(12, 12, 18, 0.94));
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.24);
+  transition: transform 0.16s ease, border-color 0.16s ease, background 0.16s ease, opacity 0.16s ease;
+}
+
+.game-button:active,
+.tool-button:active {
+  transform: scale(0.98);
+  border-color: rgba(104, 0, 255, 0.48);
+}
+
+.game-button.is-blocked,
+.tool-button.is-blocked {
+  opacity: 0.74;
+}
+
+.game-button.is-ready,
+.tool-button.is-ready {
+  border-color: rgba(53, 224, 157, 0.18);
+}
+
+.game-icon,
+.tool-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  flex: 0 0 auto;
+}
+
+.game-icon img,
+.tool-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.game-text,
+.tool-text {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+  flex: 1;
+}
+
+.game-title,
+.tool-title {
+  font-size: 15px;
+  font-weight: 950;
+  letter-spacing: -0.025em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.game-desc,
+.tool-desc {
+  font-size: 11px;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.game-status,
+.tool-status {
+  justify-self: start;
+  margin-top: 4px;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: rgba(104, 0, 255, 0.12);
+  border: 1px solid rgba(104, 0, 255, 0.30);
+  display: inline-flex;
+  align-items: center;
+  font-size: 9px;
+  font-weight: 950;
+  letter-spacing: 0.12em;
+  color: #e2d7ff;
+}
+
+.status-ready {
+  background: rgba(53, 224, 157, 0.12);
+  border-color: rgba(53, 224, 157, 0.34);
+  color: #baffdf;
+}
+
+.status-update {
+  background: rgba(255, 214, 107, 0.12);
+  border-color: rgba(255, 214, 107, 0.34);
+  color: #ffe7a8;
+}
+
+.status-rebuild {
+  background: rgba(255, 107, 138, 0.12);
+  border-color: rgba(255, 107, 138, 0.32);
+  color: #ffd7df;
+}
+
+.game-arrow,
+.tool-arrow {
+  width: 34px;
+  height: 34px;
+  border-radius: 13px;
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: grid;
+  place-items: center;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.game-arrow svg,
+.tool-arrow svg {
+  width: 18px;
+  height: 18px;
+  transform: rotate(180deg);
+}
+
+.game-lock {
+  width: 34px;
+  height: 34px;
+  border-radius: 13px;
+  background: rgba(255, 107, 138, 0.10);
+  border: 1px solid rgba(255, 107, 138, 0.24);
+  display: grid;
+  place-items: center;
+  color: #ffd7df;
+  flex: 0 0 auto;
+}
+
+.game-lock svg {
+  width: 17px;
+  height: 17px;
+}
+
+.footer-note {
+  font-size: 11px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.36);
+  padding: 4px 0 12px;
+}
+
+.maintenance-shell {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.maintenance-card {
+  width: min(100%, 460px);
+  border-radius: 30px;
+  background: linear-gradient(180deg, rgba(21, 21, 32, 0.96), rgba(10, 10, 16, 0.96));
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 32px 100px rgba(0, 0, 0, 0.62);
+  padding: 24px;
+  text-align: center;
+  display: grid;
+  gap: 15px;
+}
+
+.maintenance-logo {
+  width: 88px;
+  height: 88px;
+  margin: 0 auto;
+  object-fit: contain;
+  background: transparent !important;
+  border: 0 !important;
+  filter: drop-shadow(0 16px 30px rgba(104, 0, 255, 0.28));
+}
+
+.maintenance-card h1 {
+  font-size: 30px;
+  line-height: 1;
+  letter-spacing: -0.055em;
+}
+
+.maintenance-card p {
+  font-size: 13px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.maintenance-actions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin-top: 2px;
+}
+
+.admin-menu-link {
+  display: none;
+}
+
+.is-admin .admin-menu-link {
+  display: flex;
+}
+
+@media (max-width: 360px) {
+  .game-lock {
+    display: none;
+  }
+
+  .account-actions {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 760px) {
+  .main-content {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+
+  .account-card,
+  .global-card,
+  .section-head,
+  .games-list,
+  .tools-list,
+  .footer-note {
+    grid-column: 1 / -1;
+  }
+
+  .games-list,
+  .tools-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .menu-panel {
+    left: auto;
+    width: 320px;
+    right: calc((100vw - min(100%, 1120px)) / 2 + 16px);
+  }
+}
+
+/* ================================
+   Music iframe bridge
+   Music dibuka di iframe supaya kompatibel
+   dengan launcher baru dan bisa ditutup
+   lewat tombol kembali dari halaman Music.
+================================ */
+.music-frame-shell {
+  position: fixed;
+  inset: 0;
+  z-index: 220;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 10px;
+  padding:
+    max(12px, env(safe-area-inset-top))
+    12px
+    max(12px, env(safe-area-inset-bottom));
+  background:
+    radial-gradient(circle at 50% -10%, rgba(104, 0, 255, 0.18), transparent 35%),
+    linear-gradient(135deg, #0b1020 0%, #111a34 48%, #0d1830 100%);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(10px);
+  transition:
+    opacity 0.22s ease,
+    transform 0.22s ease;
+}
+
+.music-frame-shell.active {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.music-frame-shell::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.36;
+  background-image:
+    linear-gradient(rgba(150, 175, 255, 0.10) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(150, 175, 255, 0.10) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+.music-frame-topbar {
+  position: relative;
+  z-index: 1;
+  min-height: 58px;
+  border-radius: 22px;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(10, 10, 16, 0.90);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.38);
+  backdrop-filter: blur(12px);
+}
+
+.music-frame-back {
+  height: 42px;
+  padding: 0 12px;
+  border-radius: 15px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.music-frame-back svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.music-frame-title {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+
+.music-frame-title strong {
+  font-size: 15px;
+  font-weight: 950;
+  line-height: 1;
+}
+
+.music-frame-title small {
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.48);
+}
+
+#gamedexMusicFrame {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  border-radius: 24px;
+  background: #0b1020;
+  overflow: hidden;
+  box-shadow: 0 22px 70px rgba(0, 0, 0, 0.52);
+}
+
+body.music-frame-open .app-shell {
+  overflow: hidden;
+}
+
+@media (max-width: 380px) {
+  .music-frame-back span {
+    display: none;
+  }
+
+  .music-frame-back {
+    width: 42px;
+    padding: 0;
+  }
+}
+
+
+/* ================================
+   Music iframe layer v3
+   Mengikuti sistem main.zip: iframe sudah ada sejak Home dibuka,
+   lalu hanya dibuka/tutup pakai class open. Src tidak di-reset.
+================================ */
+:root {
+  --music-frame-height: 100vh;
+}
+@supports (height: 100dvh) {
+  :root { --music-frame-height: 100dvh; }
+}
+
+#music-bar {
+  position: fixed;
+  inset: 0;
+  z-index: 320;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: #070912;
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    height 0.34s cubic-bezier(.22,1,.36,1),
+    opacity 0.22s ease,
+    transform 0.22s ease;
+}
+
+#music-bar.open {
+  height: var(--music-frame-height);
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+#music-iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+  background: #070912;
+}
+
+body.music-frame-open {
+  overflow: hidden;
+}
+
+body.music-frame-open .app-shell {
+  pointer-events: none;
+}
+
+
+/* ================================
+   Game iframe layer v8
+   Tanpa header/back tambahan: tombol kembali berasal dari game.
+================================ */
+:root {
+  --game-frame-height: 100vh;
+}
+@supports (height: 100dvh) {
+  :root { --game-frame-height: 100dvh; }
+}
+
+.game-frame-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  width: 100%;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: #070912;
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    height 0.28s cubic-bezier(.22,1,.36,1),
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+.game-frame-layer.open {
+  height: var(--game-frame-height);
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.game-frame {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+  background: #070912;
+}
+
+body.game-frame-open {
+  overflow: hidden;
+}
+
+body.game-frame-open .app-shell {
+  pointer-events: none;
+}
+
+/* ===== Game iframe keep-alive layer fix v10 ===== */
+:root {
+  --game-frame-height: 100vh;
+}
+@supports (height: 100dvh) {
+  :root { --game-frame-height: 100dvh; }
+}
+
+#game-frame-layer.game-frame-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  width: 100%;
+  height: var(--game-frame-height);
+  display: block;
+  overflow: hidden;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(12px);
+  background: #070912;
+  transition: opacity .18s ease, transform .2s ease, visibility .18s ease;
+}
+
+#game-frame-layer.game-frame-layer.open {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+#game-frame-layer .game-frame,
+#game-frame {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+  background: #070912;
+}
+
+body.game-frame-open {
+  overflow: hidden;
+}
+
+body.game-frame-open .app-shell {
+  pointer-events: none;
+}

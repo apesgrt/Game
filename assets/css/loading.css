@@ -1,0 +1,131 @@
+body {
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+  padding:22px
+}
+.loader-card {
+  width:min(92vw,410px);
+  position:relative;
+  text-align:center;
+  padding:24px 22px;
+  background:transparent;
+  border:0;
+  box-shadow:none;
+  overflow:visible;
+  animation:cardIn .62s cubic-bezier(.22,1,.36,1) both
+}
+.loader-card::before {
+  display:none
+}
+.logo-ring {
+  position:relative;
+  width:158px;
+  height:158px;
+  margin:0 auto 18px;
+  display:grid;
+  place-items:center;
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important
+}
+.logo-ring::before,.logo-ring::after {
+  display:none!important
+}
+.logo-ring img {
+  position:relative;
+  z-index:2;
+  width:130px;
+  height:130px;
+  object-fit:contain;
+  border-radius:0!important;
+  background:transparent!important;
+  border:0!important;
+  outline:0!important;
+  box-shadow:none!important;
+  filter:drop-shadow(0 0 14px rgba(255,255,255,.12)) drop-shadow(0 24px 44px rgba(104,0,255,.36));
+  animation:logoFloat 3s ease-in-out infinite
+}
+.title {
+  position:relative;
+  font-size:clamp(34px,9vw,50px);
+  font-weight:950;
+  letter-spacing:-.06em;
+  line-height:1;
+  text-shadow:0 18px 42px rgba(104,0,255,.28)
+}
+.subtitle {
+  position:relative;
+  margin-top:10px;
+  text-transform:uppercase;
+  letter-spacing:.22em;
+  font-weight:900;
+  font-size:11px;
+  color:var(--muted)
+}
+.progress-wrap {
+  position:relative;
+  margin:30px auto 12px;
+  width:min(100%,318px);
+  height:9px;
+  border-radius:999px;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.12);
+  overflow:hidden
+}
+.progress {
+  height:100%;
+  width:0;
+  border-radius:999px;
+  background:linear-gradient(90deg,var(--purple),var(--purple-2),var(--cyan));
+  box-shadow:0 0 28px rgba(104,0,255,.54);
+  transition:width .28s cubic-bezier(.22,1,.36,1)
+}
+.meta {
+  position:relative;
+  display:flex;
+  justify-content:space-between;
+  width:min(100%,318px);
+  margin:0 auto;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  color:var(--muted)
+}
+.status {
+  max-width:230px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis
+}
+.ready .loader-card {
+  animation:exit .65s cubic-bezier(.22,1,.36,1) forwards
+}
+@keyframes logoFloat {
+  0%,100% {
+    transform:translateY(0) scale(1)
+  }
+  50% {
+    transform:translateY(-7px) scale(1.025)
+  }
+
+}
+@keyframes cardIn {
+  from {
+    opacity:0;
+    transform:translateY(18px) scale(.96)
+  }
+  to {
+    opacity:1;
+    transform:none
+  }
+
+}
+@keyframes exit {
+  to {
+    opacity:0;
+    transform:translateY(-10px) scale(1.04)
+  }
+
+}
