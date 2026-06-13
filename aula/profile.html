@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#05050a">
+  <title>GameDex Profile</title>
+  <link rel="stylesheet" href="../assets/css/base.css">
+  <link rel="stylesheet" href="../assets/css/profile.css">
+  <script src="../config/app.config.js"></script>
+  <script src="../config/firebase.config.js"></script>
+  <script src="../config/rest.config.js"></script>
+  <script src="../assets/js/core.js"></script>
+  <script src="../assets/js/firebase-adapter.js"></script>
+</head>
+<body data-page="Profile">
+  <div class="app-bg" aria-hidden="true"></div>
+  <div class="stars-twinkle" aria-hidden="true"></div>
+  <div class="fx-glow" aria-hidden="true"></div>
+
+  <main class="profile-shell">
+    <section class="container profile-container">
+      <header class="profile-top">
+        <a class="btn btn-ghost btn-icon" href="home.html" aria-label="Kembali">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        </a>
+        <div class="profile-title">
+          <h1>Edit Profile</h1>
+          <p id="profileModeText">Guest Profile</p>
+        </div>
+        <button class="btn btn-ghost btn-icon" type="button" onclick="logoutProfile()" id="topLogoutBtn" aria-label="Logout">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+        </button>
+      </header>
+
+      <section class="profile-card hero-card">
+        <div class="profile-avatar-wrap">
+          <button class="profile-avatar" type="button" onclick="document.getElementById('avatarFile').click()" aria-label="Ganti avatar" id="avatarPreview">
+            <span class="initial">G</span>
+          </button>
+          <span class="chip" id="loginBadge">Guest</span>
+        </div>
+        <div class="hero-info">
+          <h2 id="displayNamePreview">Guest</h2>
+          <p id="displayUsernamePreview">@guest</p>
+          <div class="uid-box" id="uidBox">
+            <span>UID</span>
+            <b id="uidText">Guest tidak punya UID</b>
+          </div>
+        </div>
+      </section>
+
+      <section class="profile-card">
+        <div class="card-headline">
+          <div>
+            <h2>Account Details</h2>
+            <p>UID otomatis dari Firebase kalau kamu sudah login. Mode Guest tidak dibuatkan UID.</p>
+          </div>
+        </div>
+
+        <input class="hidden" id="avatarFile" type="file" accept="image/png,image/jpeg,image/webp" onchange="pickProfileAvatar(this)">
+        <div class="form-grid">
+          <div class="field full-field">
+            <label class="label">Avatar URL</label>
+            <input class="input" id="avatarUrl" placeholder="https://.../avatar.png">
+          </div>
+          <div class="field">
+            <label class="label">Nama Tampilan</label>
+            <input class="input" id="nameInput" maxlength="28" placeholder="Nama kamu">
+          </div>
+          <div class="field">
+            <label class="label">Username</label>
+            <input class="input" id="usernameInput" maxlength="28" placeholder="@username">
+          </div>
+          <div class="field full-field">
+            <label class="label">Bio</label>
+            <textarea class="input" id="bioInput" rows="4" maxlength="160" placeholder="Bio pendek"></textarea>
+          </div>
+        </div>
+
+        <div class="profile-actions">
+          <button class="btn btn-dark" type="button" onclick="resetProfileForm()">RESET FORM</button>
+          <button class="btn btn-purple" type="button" onclick="saveProfilePage()">SIMPAN PROFILE</button>
+        </div>
+      </section>
+
+      <section class="profile-card account-state-card">
+        <h2>Login State</h2>
+        <p id="loginStateText">Kamu sedang masuk sebagai Guest.</p>
+        <div class="profile-actions">
+          <a class="btn btn-purple" href="login.html" id="loginSwitchBtn">LOGIN / PINDAH AKUN</a>
+          <button class="btn btn-danger" type="button" onclick="logoutProfile()" id="logoutBtn">LOGOUT KE GUEST</button>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <div class="toast" id="toast"></div>
+  <script src="../assets/js/boot.js"></script>
+  <script src="../assets/js/profile.js"></script>
+</body>
+</html>
