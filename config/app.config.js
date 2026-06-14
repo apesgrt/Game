@@ -18,7 +18,8 @@ window.GAMEDEX_CONFIG = {
   admin: {
     enabled: true,
     adminEmails: [
-      "hahahacees@gmail.com"
+      "hahahacees@gmail.com",
+      "keystokml@gmail.com"
     ],
     enableLocalAdminFallback: false
   },
