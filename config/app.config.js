@@ -1,8 +1,8 @@
 window.GAMEDEX_CONFIG = {
   app: {
     name: "GameDex",
-    subtitle: "Mobile Launcher",
-    tagline: "Finale Base",
+    subtitle: "game simple",
+    tagline: "SIAP PAKAI",
     description: "Launcher game ringan, responsif, dan siap dipasang game hasil rebuild.",
     version: "base-0.9-iframe-spy-login-v11",
     defaultUserName: "Guest"
